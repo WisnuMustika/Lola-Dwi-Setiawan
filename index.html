@@ -11,8 +11,8 @@
     --ink-800:#0a0e1a;
     --ink-700:#111528;
     --ink-600:#171c33;
-    --violet:#6366f1;
-    --cyan:#22d3ee;
+    --violet:#d34dd2;
+    --cyan:#592693;
     --line: rgba(148,163,184,.14);
   }
   *{-webkit-tap-highlight-color:transparent;}
@@ -135,10 +135,19 @@
         <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
         <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
       </svg>
-      <div>
+      <div class="flex-1">
         <div class="font-bold text-white text-[15px] leading-tight">Database Pribadi Lola Dwi Setiawan</div>
         <div class="text-[11px] text-slate-400">Sistem Tanggung Renteng</div>
       </div>
+      <button onclick="logout()" title="Keluar"
+        class="flex items-center gap-1 rounded-lg px-3 py-2 text-[11px] font-semibold text-red-400 border border-red-400/30 bg-red-400/10">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <path d="M16 17l5-5-5-5"/>
+          <path d="M21 12H9"/>
+        </svg>
+        Keluar
+      </button>
     </div>
   </header>
 
@@ -273,6 +282,23 @@
 
 <div id="toast" class="toast rounded-xl px-4 py-3 text-[13px] text-slate-100"></div>
 
+<!-- Modal konfirmasi keluar -->
+<div id="modal-logout" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4" style="background:rgba(5,6,13,.72);backdrop-filter:blur(2px);">
+  <div class="w-full max-w-xs rounded-2xl p-5" style="background:var(--ink-700);border:1px solid var(--line);box-shadow:0 20px 50px -12px rgba(0,0,0,.6);">
+    <div class="flex items-center justify-center w-11 h-11 rounded-full mx-auto mb-3" style="background:rgba(99,102,241,.15);">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" style="color:var(--cyan);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </div>
+    <p class="text-center text-[15px] font-semibold text-slate-100 mb-1">Keluar dari sistem?</p>
+    <p class="text-center text-[12px] text-slate-400 mb-4">Terima Kasih, Semoga Harimu Menyenangkan</p>
+    <div class="flex gap-2">
+      <button onclick="tutupModalLogout()" class="flex-1 rounded-xl py-2.5 text-[13px] font-medium text-slate-200" style="background:var(--ink-600);border:1px solid var(--line);">Batal</button>
+      <button onclick="konfirmasiLogout()" class="flex-1 rounded-xl py-2.5 text-[13px] font-semibold text-white grad-btn">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const STORAGE_KEY = 'tr_ciledug_data'; // sudah tidak dipakai, data kini langsung ke server
   // Isi link Web App hasil deploy Code_TanggungRenteng.gs di sini:
@@ -304,6 +330,47 @@
     document.getElementById('page-dashboard').classList.remove('hidden');
     switchTab('dashboard');
   }
+
+  function logout(){
+    document.getElementById('modal-logout').classList.remove('hidden');
+  }
+
+  function tutupModalLogout(){
+    document.getElementById('modal-logout').classList.add('hidden');
+  }
+
+  function konfirmasiLogout(){
+    document.getElementById('modal-logout').classList.add('hidden');
+    document.getElementById('page-dashboard').classList.add('hidden');
+    document.getElementById('page-landing').classList.remove('hidden');
+    showToast('Anda telah keluar');
+  }
+
+  // ===== Izin lokasi saat pertama kali membuka halaman =====
+  let userLocation = null;
+
+  function mintaIzinLokasi(){
+    if(!navigator.geolocation){
+      console.warn('Geolocation tidak didukung browser ini');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userLocation = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          akurasi: pos.coords.accuracy
+        };
+      },
+      (err) => {
+        console.warn('Izin lokasi ditolak / gagal:', err.message);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+  // Minta izin begitu halaman selesai dimuat
+  window.addEventListener('load', mintaIzinLokasi);
+
 
   function switchTab(tab){
     ['dashboard','input','rekap'].forEach(t=>{
@@ -507,7 +574,8 @@
       keterangan: document.getElementById('f-ket').value.trim(),
       signature: getSignatureDataUrl(),
       attachments: attachments.slice(),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      lokasi: userLocation ? `${userLocation.lat}, ${userLocation.lng}` : ''
     };
 
     try{
