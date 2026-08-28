@@ -86,6 +86,58 @@
     background:#0f172a; border:1px solid var(--line); z-index:60;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ===== Loading screen — maskot bunga ===== */
+  #page-loading{ background:var(--ink-900); }
+  .mascot-bounce{
+    animation: mascotBounce 1.1s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  @keyframes mascotBounce{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-16px) rotate(2deg); }
+  }
+  .petal-sway{
+    animation: petalSway 2.6s ease-in-out infinite;
+    transform-origin: 70px 62px;
+  }
+  @keyframes petalSway{
+    0%,100%{ transform:rotate(-5deg); }
+    50%{ transform:rotate(5deg); }
+  }
+  .mascot-eye{
+    animation: mascotBlink 3.4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes mascotBlink{
+    0%,90%,100%{ transform:scaleY(1); }
+    94%{ transform:scaleY(.1); }
+  }
+  .mascot-shadow{
+    animation: shadowPulse 1.1s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes shadowPulse{
+    0%,100%{ transform:scaleX(1); opacity:.35; }
+    50%{ transform:scaleX(.78); opacity:.18; }
+  }
+  .mascot-arm-l{ animation: armWaveL 1.1s ease-in-out infinite; transform-origin: 42px 108px; }
+  .mascot-arm-r{ animation: armWaveR 1.1s ease-in-out infinite; transform-origin: 98px 108px; }
+  @keyframes armWaveL{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(-14deg);} }
+  @keyframes armWaveR{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(14deg);} }
+  .loading-track{
+    background:#171c33;
+    border:1px solid var(--line);
+  }
+  .loading-fill{
+    background:linear-gradient(90deg,#fbbf24,#f97316);
+    box-shadow:0 0 12px rgba(251,191,36,.55);
+    transition:width .12s linear;
+  }
+  .loading-dot{ animation: dotBlink 1.2s ease-in-out infinite; }
+  .loading-dot:nth-child(2){ animation-delay:.15s; }
+  .loading-dot:nth-child(3){ animation-delay:.3s; }
+  @keyframes dotBlink{ 0%,80%,100%{ opacity:.25; } 40%{ opacity:1; } }
 </style>
 </head>
 <body>
@@ -121,6 +173,78 @@
         </svg>
       </button>
     </div>
+  </div>
+</section>
+
+<!-- ================= LOADING SCREEN ================= -->
+<section id="page-loading" class="hidden fixed inset-0 z-50 flex items-center justify-center px-6">
+  <div class="flex flex-col items-center w-full max-w-xs">
+
+    <svg class="mascot-bounce" width="150" height="150" viewBox="0 0 140 150">
+      <defs>
+        <linearGradient id="petalg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffcf4d"/>
+          <stop offset="1" stop-color="#f5940a"/>
+        </linearGradient>
+        <linearGradient id="faceg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffe27a"/>
+          <stop offset="1" stop-color="#ffc633"/>
+        </linearGradient>
+      </defs>
+
+      <!-- bayangan -->
+      <ellipse class="mascot-shadow" cx="70" cy="144" rx="30" ry="6" fill="#000"/>
+
+      <!-- lengan -->
+      <ellipse class="mascot-arm-l" cx="40" cy="112" rx="9" ry="15" fill="url(#faceg)"/>
+      <ellipse class="mascot-arm-r" cx="100" cy="112" rx="9" ry="15" fill="url(#faceg)"/>
+
+      <!-- badan -->
+      <ellipse cx="70" cy="118" rx="30" ry="26" fill="url(#faceg)"/>
+      <ellipse cx="70" cy="122" rx="18" ry="20" fill="#fff8e6"/>
+      <!-- kaki -->
+      <ellipse cx="56" cy="146" rx="9" ry="6" fill="#f5940a"/>
+      <ellipse cx="84" cy="146" rx="9" ry="6" fill="#f5940a"/>
+
+      <!-- kelopak -->
+      <g class="petal-sway">
+        <g fill="url(#petalg)">
+          <ellipse cx="70" cy="20" rx="15" ry="22"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(45 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(90 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(135 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(180 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(225 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(270 70 62)"/>
+          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(315 70 62)"/>
+        </g>
+      </g>
+
+      <!-- muka -->
+      <circle cx="70" cy="62" r="30" fill="url(#faceg)"/>
+      <!-- pipi -->
+      <ellipse cx="47" cy="70" rx="7" ry="4.5" fill="#ff9f7a" opacity=".7"/>
+      <ellipse cx="93" cy="70" rx="7" ry="4.5" fill="#ff9f7a" opacity=".7"/>
+      <!-- mata -->
+      <g class="mascot-eye">
+        <ellipse cx="58" cy="58" rx="4.5" ry="6" fill="#1a1a1a"/>
+        <ellipse cx="82" cy="58" rx="4.5" ry="6" fill="#1a1a1a"/>
+        <circle cx="59.5" cy="55.5" r="1.4" fill="#fff"/>
+        <circle cx="83.5" cy="55.5" r="1.4" fill="#fff"/>
+      </g>
+      <!-- mulut -->
+      <path d="M63 73 Q70 79 77 73" stroke="#c2410c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <div class="text-white font-semibold text-[15px] mt-4 mb-1">
+      Menyiapkan Dashboard<span class="loading-dot">.</span><span class="loading-dot">.</span><span class="loading-dot">.</span>
+    </div>
+    <p class="text-slate-500 text-[11px] mb-5">Mohon tunggu sebentar</p>
+
+    <div class="w-full h-3 rounded-full overflow-hidden loading-track">
+      <div id="loading-bar-fill" class="h-full rounded-full loading-fill" style="width:0%"></div>
+    </div>
+    <div id="loading-percent" class="text-slate-400 text-[11px] mt-2 font-semibold">0%</div>
   </div>
 </section>
 
@@ -327,8 +451,33 @@
 
   function goDashboard(){
     document.getElementById('page-landing').classList.add('hidden');
-    document.getElementById('page-dashboard').classList.remove('hidden');
-    switchTab('dashboard');
+    const loading = document.getElementById('page-loading');
+    const fill = document.getElementById('loading-bar-fill');
+    const percent = document.getElementById('loading-percent');
+
+    loading.classList.remove('hidden');
+    fill.style.width = '0%';
+    percent.textContent = '0%';
+
+    const duration = 1800; // durasi loading (ms), ubah sesuai selera
+    const start = performance.now();
+
+    function tick(now){
+      const elapsed = now - start;
+      const progress = Math.min(100, Math.round((elapsed / duration) * 100));
+      fill.style.width = progress + '%';
+      percent.textContent = progress + '%';
+      if(progress < 100){
+        requestAnimationFrame(tick);
+      } else {
+        setTimeout(()=>{
+          loading.classList.add('hidden');
+          document.getElementById('page-dashboard').classList.remove('hidden');
+          switchTab('dashboard');
+        }, 250);
+      }
+    }
+    requestAnimationFrame(tick);
   }
 
   function logout(){
