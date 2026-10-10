@@ -1375,8 +1375,8 @@
       login.classList.remove('hidden');
       setBioStatus('Metode keamanan sudah terdaftar di perangkat ini.');
     }else{
-      title.textContent = 'Daftarkan Akses';
-      desc.textContent = 'Pertama kali menggunakan sistem? Pilih metode keamanan perangkat Anda.';
+      title.textContent = 'Pilih Mode Keamanan mu';
+      desc.textContent = 'Ini Fitur Baru, Pilih metode keamanan perangkat Anda.';
       register.classList.remove('hidden');
       login.classList.add('hidden');
       setBioStatus('Pilih Sidik Jari atau Wajah terlebih dahulu.');
@@ -1621,7 +1621,7 @@
     security: ['Verifikasi Keamanan', 'Pantau metode biometrik dan detail perangkat yang digunakan.']
   };
 
-  const SECURITY_MENU_PASSWORD = '1234';
+  const SECURITY_MENU_PASSWORD = '08maret';
 
   function requestSecurityAccess(){
     const modal = document.getElementById('security-password-modal');
