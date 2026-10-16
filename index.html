@@ -11,10 +11,11 @@
     --ink-800:#0a0e1a;
     --ink-700:#111528;
     --ink-600:#171c33;
-    --violet:#d34dd2;
-    --cyan:#592693;
+    --violet:#0000FF;
+    --cyan:#0000FF;
     --line: rgba(148,163,184,.14);
   }
+
   *{-webkit-tap-highlight-color:transparent;}
   body{
     background:var(--ink-900);
@@ -32,6 +33,22 @@
     box-shadow:0 10px 30px -8px rgba(99,102,241,.55);
   }
   .grad-btn:active{ transform:scale(.98); }
+
+  /* ===== BIOMETRIC / PASSKEY LOGIN ===== */
+  .bio-choice{
+    transition:transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .bio-choice:active{transform:scale(.98);}
+  .bio-choice.selected{
+    border-color:rgba(211,77,210,.75);
+    background:linear-gradient(135deg,rgba(211,77,210,.16),rgba(89,38,147,.16));
+  }
+  .bio-icon{
+    width:54px;height:54px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);
+  }
 
   /* landing background: drawer / archive cabinet motif, built with CSS (no external photo) */
   .archive-bg{
@@ -164,40 +181,589 @@
     0%,100%{ transform:scaleY(1); }
     50%{ transform:scaleY(.4) translateY(2px); }
   }
+
+  /* ===== MODERN SIDEBAR UI ===== */
+  #page-dashboard{
+    background:
+      radial-gradient(circle at 82% 0%, rgba(211,77,210,.10), transparent 28%),
+      radial-gradient(circle at 25% 90%, rgba(89,38,147,.12), transparent 30%),
+      var(--ink-900) !important;
+  }
+  .app-shell{min-height:100vh;display:flex;}
+  .app-sidebar{
+    position:fixed;z-index:40;left:0;top:0;bottom:0;width:264px;
+    padding:22px 16px 18px;
+    background:linear-gradient(180deg,rgba(13,17,32,.98),rgba(7,9,18,.98));
+    border-right:1px solid rgba(148,163,184,.12);
+    box-shadow:18px 0 50px rgba(0,0,0,.18);
+    backdrop-filter:blur(18px);
+    transition:transform .28s ease;
+  }
+  .sidebar-brand{
+    display:flex;align-items:center;gap:11px;padding:4px 8px 22px;
+    border-bottom:1px solid rgba(148,163,184,.10);margin-bottom:18px;
+  }
+  .brand-mark{
+    width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(211,77,210,.22),rgba(89,38,147,.24));
+    border:1px solid rgba(211,77,210,.25);box-shadow:0 10px 30px rgba(89,38,147,.22);
+  }
+  .sidebar-label{
+    font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    color:#64748b;padding:0 10px 8px;
+  }
+  .side-menu{
+    width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;margin-bottom:6px;
+    border-radius:14px;color:#94a3b8;font-size:12px;font-weight:700;text-align:left;
+    border:1px solid transparent;transition:.18s ease;
+  }
+  .side-menu:hover{background:rgba(255,255,255,.045);color:#e2e8f0;transform:translateX(2px);}
+  .side-menu.active{
+    color:#fff;background:linear-gradient(135deg,rgba(211,77,210,.18),rgba(89,38,147,.20));
+    border-color:rgba(211,77,210,.28);box-shadow:0 10px 24px rgba(89,38,147,.12);
+  }
+  .side-icon{
+    width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);flex:none;
+  }
+  .side-menu.active .side-icon{
+    background:linear-gradient(135deg,#d34dd2,#592693);border-color:transparent;box-shadow:0 7px 18px rgba(211,77,210,.22);
+  }
+  .sidebar-bottom{
+    position:absolute;left:16px;right:16px;bottom:18px;
+    padding-top:14px;border-top:1px solid rgba(148,163,184,.10);
+  }
+  .security-mini{
+    padding:12px;border-radius:15px;background:rgba(16,185,129,.06);
+    border:1px solid rgba(16,185,129,.14);margin-bottom:9px;
+  }
+  .side-logout{
+    width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:13px;
+    color:#fb7185;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.14);
+    font-size:12px;font-weight:700;
+  }
+  .app-main{width:100%;margin-left:264px;min-width:0;}
+  .app-topbar{
+    position:sticky;top:0;z-index:30;height:74px;padding:0 28px;
+    display:flex;align-items:center;gap:16px;
+    background:rgba(5,6,13,.78);border-bottom:1px solid rgba(148,163,184,.10);
+    backdrop-filter:blur(18px);
+  }
+  .mobile-menu-btn{display:none;}
+  .topbar-spacer{flex:1;}
+  .top-action{
+    width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    color:#94a3b8;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.10);
+  }
+  .profile-pill{
+    display:flex;align-items:center;gap:9px;padding:5px 10px 5px 6px;border-radius:13px;
+    background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.10);
+  }
+  .profile-avatar{
+    width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:11px;font-weight:900;background:linear-gradient(135deg,#d34dd2,#592693);
+  }
+  .content-wrap{max-width:1180px;margin:0 auto;padding:26px 28px 50px;}
+  .page-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px;}
+  .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#a855f7;font-weight:800;margin-bottom:5px;}
+  .page-title{font-size:24px;line-height:1.15;color:#fff;font-weight:900;letter-spacing:-.02em;}
+  .page-subtitle{font-size:12px;color:#64748b;margin-top:6px;}
+  .modern-card{
+    background:linear-gradient(145deg,rgba(17,21,40,.82),rgba(8,11,21,.78));
+    border:1px solid rgba(148,163,184,.12);box-shadow:0 18px 45px rgba(0,0,0,.16);
+    backdrop-filter:blur(14px);
+  }
+  .stat-card{
+    position:relative;overflow:hidden;padding:18px;border-radius:20px;
+  }
+  .stat-card::after{
+    content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-30px;top:-30px;
+    background:radial-gradient(circle,rgba(211,77,210,.18),transparent 68%);
+  }
+  .stat-icon{
+    width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    background:rgba(211,77,210,.10);border:1px solid rgba(211,77,210,.15);color:#e879f9;margin-bottom:14px;
+  }
+  .activity-item{
+    padding:12px;border-radius:14px;background:rgba(255,255,255,.025);
+    border:1px solid rgba(148,163,184,.08);transition:.18s ease;
+  }
+  .activity-item:hover{background:rgba(255,255,255,.045);transform:translateY(-1px);}
+  .mobile-overlay{display:none;}
+  @media(max-width:900px){
+    .app-sidebar{transform:translateX(-105%);width:282px;}
+    .app-sidebar.open{transform:translateX(0);}
+    .app-main{margin-left:0;}
+    .mobile-menu-btn{display:flex;}
+    .mobile-overlay{position:fixed;inset:0;z-index:35;background:rgba(0,0,0,.58);backdrop-filter:blur(2px);}
+    .mobile-overlay.show{display:block;}
+    .app-topbar{height:66px;padding:0 15px;}
+    .content-wrap{padding:20px 15px 42px;}
+    .page-title{font-size:21px;}
+  }
+  @media(max-width:520px){
+    .profile-pill .profile-name{display:none;}
+    .top-action{width:36px;height:36px;}
+    .page-heading{align-items:flex-start;flex-direction:column;}
+  }
+
+
+  #tab-security::after{
+    content:"🔒";
+    margin-left:auto;
+    font-size:10px;
+    opacity:.75;
+  }
+
+
+  .device-edit-wrap{display:flex;align-items:center;gap:6px;}
+  .device-value-wrap{display:inline-flex;align-items:center;justify-content:flex-end;gap:8px;max-width:100%;}
+  .device-name-text{overflow-wrap:anywhere;}
+  .device-edit-btn{
+    display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;
+    border-radius:8px;color:#c4b5fd;background:rgba(139,92,246,.10);
+    border:1px solid rgba(139,92,246,.18);font-size:11px;transition:.18s ease;
+  }
+  .device-edit-btn:hover{background:rgba(139,92,246,.20);color:#fff;transform:translateY(-1px);}
+  .device-edit-input{
+    width:100%;min-width:0;padding:7px 9px;border-radius:9px;
+    background:rgba(2,6,23,.72);border:1px solid rgba(139,92,246,.35);
+    color:#fff;outline:none;font-size:11px;
+  }
+  .device-edit-actions{display:flex;gap:5px;}
+  .device-save-btn,.device-cancel-btn{
+    border-radius:8px;padding:6px 8px;font-size:9px;font-weight:800;
+  }
+  .device-save-btn{color:#d1fae5;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.18);}
+  .device-cancel-btn{color:#fecdd3;background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.14);}
+
+
+  /* Popup status online */
+  .online-popup{
+    touch-action:pan-y;
+    position:fixed; top:20px; right:20px; z-index:9999;
+    width:min(340px,calc(100vw - 32px)); padding:14px 16px;
+    border:1px solid rgba(34,197,94,.28);
+    background:rgba(10,20,18,.96);
+    box-shadow:0 18px 45px rgba(0,0,0,.38);
+    backdrop-filter:blur(14px); border-radius:16px;
+    display:flex; align-items:center; gap:12px;
+    transform:translateX(calc(100% + 30px)); opacity:0;
+    pointer-events:none; transition:transform .35s ease,opacity .35s ease;
+  }
+  .online-popup.show{transform:translateX(0);opacity:1;}
+  .online-popup-dot{
+    width:11px;height:11px;border-radius:999px;background:#22c55e;
+    box-shadow:0 0 0 5px rgba(34,197,94,.12),0 0 16px rgba(34,197,94,.55);
+    flex:0 0 auto; animation:onlinePopupPulse 1.6s infinite;
+  }
+  @keyframes onlinePopupPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.82);opacity:.7}}
+  .online-popup-title{font-size:13px;font-weight:800;color:#f8fafc}
+  .online-popup-sub{font-size:11px;color:#94a3b8;margin-top:2px}
+  .online-popup-close{margin-left:auto;border:0;background:transparent;color:#64748b;font-size:18px;line-height:1;cursor:pointer;padding:2px 4px}
+  .online-popup-close:hover{color:#e2e8f0}
+  @media(max-width:640px){.online-popup{top:12px;right:12px;width:calc(100vw - 24px)}}
+
+
+  /* ===== POLISH UI: login premium + background aplikasi ===== */
+  body{
+    background:#070816;
+    color:#e5e7eb;
+    background-image:
+      radial-gradient(ellipse at 8% 12%, rgba(168,85,247,.12), transparent 32%),
+      radial-gradient(ellipse at 92% 78%, rgba(34,211,238,.08), transparent 30%);
+  }
+  .archive-bg{
+    isolation:isolate;
+    min-height:100svh;
+    padding-top:clamp(24px,5vh,56px);
+    padding-bottom:clamp(24px,5vh,56px);
+    background:
+      radial-gradient(ellipse at 12% 18%, rgba(168,85,247,.28), transparent 36%),
+      radial-gradient(ellipse at 86% 22%, rgba(34,211,238,.16), transparent 30%),
+      radial-gradient(ellipse at 50% 100%, rgba(217,70,239,.12), transparent 45%),
+      linear-gradient(135deg,#080b18 0%,#101329 48%,#080916 100%);
+  }
+  .archive-bg::before{
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(ellipse at center,black 5%,transparent 78%);
+    mask-image:radial-gradient(ellipse at center,black 5%,transparent 78%);
+    opacity:.55;
+  }
+  .archive-bg::after{
+    left:calc(50% - 230px);
+    top:8%;
+    width:460px;
+    height:460px;
+    right:auto;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(168,85,247,.12),rgba(34,211,238,.04) 42%,transparent 70%);
+    filter:blur(8px);
+    animation:loginGlow 9s ease-in-out infinite alternate;
+  }
+  @keyframes loginGlow{
+    from{transform:translate3d(-28px,-8px,0) scale(.94);opacity:.65}
+    to{transform:translate3d(28px,16px,0) scale(1.08);opacity:1}
+  }
+  #page-landing > div{max-width:470px;}
+  #page-landing .card-glass{
+    position:relative;
+    overflow:hidden;
+    padding:clamp(22px,5vw,36px);
+    border-radius:30px;
+    background:linear-gradient(155deg,rgba(20,25,48,.91),rgba(8,11,24,.92));
+    border:1px solid rgba(203,213,225,.17);
+    box-shadow:0 32px 100px rgba(0,0,0,.48),0 0 70px rgba(139,92,246,.12),inset 0 1px rgba(255,255,255,.08);
+    backdrop-filter:blur(24px);
+  }
+  #page-landing .card-glass::before{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(216,180,254,.8),rgba(103,232,249,.7),transparent);
+  }
+  #page-landing .bio-icon{
+    background:linear-gradient(145deg,rgba(168,85,247,.18),rgba(34,211,238,.08));
+    border-color:rgba(196,181,253,.22);
+    box-shadow:0 10px 30px rgba(139,92,246,.14),inset 0 1px rgba(255,255,255,.07);
+  }
+  #page-landing h1{letter-spacing:-.04em;font-size:clamp(25px,5vw,31px);}
+  #page-landing #auth-desc{max-width:340px;margin-left:auto;margin-right:auto;color:#a8b2c8;}
+  #page-landing #bio-user-panel > div:first-child{
+    text-transform:uppercase;letter-spacing:.13em;font-size:10px;color:#b9c2d7;
+  }
+  #page-landing .bio-choice{
+    position:relative;
+    min-height:78px;
+    border-color:rgba(148,163,184,.16);
+    background:linear-gradient(120deg,rgba(30,36,63,.72),rgba(15,19,39,.78));
+    box-shadow:inset 0 1px rgba(255,255,255,.035);
+  }
+  #page-landing .bio-choice:hover{
+    transform:translateY(-2px);
+    border-color:rgba(196,181,253,.45);
+    background:linear-gradient(120deg,rgba(76,29,149,.28),rgba(15,23,42,.88));
+    box-shadow:0 12px 26px rgba(0,0,0,.18);
+  }
+  #page-landing .bio-choice .bio-icon{
+    width:46px;height:46px;min-width:46px;border-radius:15px;
+    font-size:20px;
+  }
+  #page-landing .bio-choice span.block{line-height:1.45;}
+  #page-landing .grad-btn{
+    min-height:48px;
+    border:1px solid rgba(255,255,255,.16);
+    background:linear-gradient(110deg,#8b5cf6 0%,#c026d3 48%,#0ea5e9 100%);
+    background-size:180% 100%;
+    box-shadow:0 12px 30px rgba(139,92,246,.25),inset 0 1px rgba(255,255,255,.22);
+    transition:transform .2s ease,filter .2s ease,background-position .3s ease;
+  }
+  #page-landing .grad-btn:hover{background-position:100% 0;filter:brightness(1.08);transform:translateY(-1px);}
+  #page-landing .grad-btn:active{transform:scale(.985);}
+  #page-landing #bio-status{
+    border-color:rgba(167,139,250,.22);
+    background:rgba(15,23,42,.75);
+    line-height:1.6;
+  }
+  #page-landing .security-caption{
+    display:flex;justify-content:center;align-items:center;gap:7px;
+    margin-top:20px;color:#73809b;font-size:10px;letter-spacing:.02em;
+  }
+  #page-landing .security-caption .secure-dot{
+    width:6px;height:6px;border-radius:99px;background:#34d399;
+    box-shadow:0 0 12px rgba(52,211,153,.7);
+  }
+  /* Aplikasi: latar belakang lebih berlapis, konten tetap terbaca */
+  #page-dashboard{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 88% 2%,rgba(14,165,233,.09),transparent 26%),
+      radial-gradient(ellipse at 24% 44%,rgba(139,92,246,.09),transparent 34%),
+      linear-gradient(135deg,#070a14 0%,#0a0e1b 55%,#080a15 100%) !important;
+  }
+  #page-dashboard::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:52px 52px;
+    -webkit-mask-image:linear-gradient(to bottom,black,transparent 72%);
+    mask-image:linear-gradient(to bottom,black,transparent 72%);
+  }
+  #page-dashboard .app-sidebar{
+    background:linear-gradient(180deg,rgba(15,19,38,.97),rgba(7,9,19,.98));
+    border-right-color:rgba(167,139,250,.14);
+    box-shadow:18px 0 55px rgba(0,0,0,.24);
+  }
+  #page-dashboard .app-topbar{
+    background:rgba(7,10,22,.76);
+    border-bottom-color:rgba(167,139,250,.13);
+  }
+  #page-dashboard .modern-card{
+    border-color:rgba(167,139,250,.13);
+    box-shadow:0 20px 48px rgba(0,0,0,.19),inset 0 1px rgba(255,255,255,.025);
+  }
+  #page-dashboard .page-heading{position:relative;}
+  @media(max-width:520px){
+    #page-landing{padding-left:15px;padding-right:15px;}
+    #page-landing .card-glass{border-radius:25px;}
+    #page-landing .bio-choice{min-height:72px;padding:12px;}
+    #page-landing .bio-choice .bio-icon{width:42px;height:42px;min-width:42px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .archive-bg::after{animation:none;}
+    #page-landing .bio-choice,#page-landing .grad-btn{transition:none;}
+  }
+
+
+  /* ===== TEMA TERANG PUTIH: menggantikan dasar gelap tanpa mengubah fungsi ===== */
+  :root{
+    --ink-900:#f6f8fc;
+    --ink-800:#ffffff;
+    --ink-700:#ffffff;
+    --ink-600:#eef2f8;
+    --line:rgba(100,116,139,.22);
+  }
+  body{background:#f6f8fc!important;color:#1e293b;}
+  #page-loading,#page-logout{background:#f6f8fc!important;color:#1e293b!important;}
+  .archive-bg{
+    background:
+      radial-gradient(ellipse at 12% 15%,rgba(168,85,247,.11),transparent 35%),
+      radial-gradient(ellipse at 88% 18%,rgba(34,211,238,.12),transparent 32%),
+      linear-gradient(135deg,#ffffff 0%,#f4f7ff 55%,#f7fbff 100%)!important;
+  }
+  .archive-bg::before{background-image:linear-gradient(rgba(100,116,139,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(100,116,139,.055) 1px,transparent 1px);opacity:.7;}
+  .archive-bg::after{background:radial-gradient(circle,rgba(168,85,247,.10),rgba(34,211,238,.06) 42%,transparent 70%);}
+  .card-glass{background:rgba(255,255,255,.88)!important;border-color:rgba(148,163,184,.26)!important;}
+  #page-landing{color:#1e293b!important;}
+  #page-landing .card-glass{
+    background:linear-gradient(150deg,rgba(255,255,255,.98),rgba(248,250,255,.96))!important;
+    border:1px solid rgba(148,163,184,.28)!important;
+    box-shadow:0 28px 80px rgba(51,65,85,.14),0 0 55px rgba(139,92,246,.08),inset 0 1px #fff!important;
+  }
+  #page-landing h1,#page-landing h2,#page-landing h3,#page-landing .text-white,#page-landing .text-slate-100,#page-landing .text-slate-200,#page-landing .text-slate-300{color:#172033!important;}
+  #page-landing #auth-desc{color:#64748b!important;}
+  #page-landing #bio-user-panel > div:first-child{color:#64748b!important;}
+  #page-landing .bio-choice{background:linear-gradient(120deg,#fff,#f7f8ff)!important;border-color:#dbe2ee!important;box-shadow:0 5px 16px rgba(51,65,85,.05)!important;}
+  #page-landing .bio-choice:hover{background:linear-gradient(120deg,#f5f0ff,#effaff)!important;border-color:#c4b5fd!important;box-shadow:0 12px 26px rgba(51,65,85,.10)!important;}
+  #page-landing .bio-choice.selected{background:linear-gradient(120deg,#f5f0ff,#effaff)!important;border-color:#a78bfa!important;}
+  #page-landing .bio-icon{background:linear-gradient(145deg,#f1eaff,#e8f8ff)!important;border-color:#e2d7ff!important;box-shadow:none!important;}
+  #page-landing #bio-status{background:#f1f5f9!important;border-color:#dbe3ef!important;color:#334155!important;}
+  #page-landing .security-caption{color:#64748b!important;}
+  #page-dashboard{
+    background:
+      radial-gradient(ellipse at 88% 2%,rgba(14,165,233,.07),transparent 26%),
+      radial-gradient(ellipse at 24% 44%,rgba(139,92,246,.06),transparent 34%),
+      linear-gradient(135deg,#f8fafc 0%,#f2f5fb 55%,#ffffff 100%)!important;
+    color:#1e293b!important;
+  }
+  #page-dashboard::before{background-image:linear-gradient(rgba(100,116,139,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(100,116,139,.05) 1px,transparent 1px);opacity:.65;}
+  #page-dashboard .app-sidebar{background:rgba(255,255,255,.96)!important;border-right:1px solid #e2e8f0!important;box-shadow:12px 0 32px rgba(15,23,42,.06)!important;}
+  #page-dashboard .app-topbar{background:rgba(255,255,255,.88)!important;border-bottom:1px solid #e2e8f0!important;}
+  #page-dashboard .modern-card{background:rgba(255,255,255,.96)!important;border-color:#e2e8f0!important;box-shadow:0 12px 32px rgba(15,23,42,.06)!important;}
+  #page-dashboard .text-white,#page-dashboard .text-slate-100,#page-dashboard .text-slate-200,#page-dashboard .text-slate-300,#page-dashboard .text-slate-400{color:#334155!important;}
+  #page-dashboard .text-slate-500,#page-dashboard .text-slate-600{color:#64748b!important;}
+  #page-dashboard .side-menu{color:#475569!important;}
+  #page-dashboard .side-menu:hover{background:#f1f5f9!important;color:#5b21b6!important;}
+  #page-dashboard .side-menu.active{background:linear-gradient(135deg,#f3e8ff,#e0f2fe)!important;color:#6d28d9!important;}
+  #page-dashboard input,#page-dashboard select,#page-dashboard textarea{background:#fff;color:#1e293b;border-color:#cbd5e1;}
+  #page-dashboard table th{color:#475569!important;}
+  #page-dashboard table td{color:#334155;}
+  #page-dashboard .app-sidebar [style*="rgba(15,19,38"],#page-dashboard .app-sidebar [style*="rgba(7,9,19"]{background:#fff!important;}
+  .toast{background:#fff!important;color:#1e293b!important;box-shadow:0 12px 30px rgba(15,23,42,.14);}
+  #modal-logout > div{background:#fff!important;color:#1e293b!important;border-color:#e2e8f0!important;box-shadow:0 20px 50px rgba(15,23,42,.18)!important;}
+  #modal-logout .text-white,#modal-logout .text-slate-200{color:#334155!important;}
+  /* ===== Kontras teks untuk tema putih ===== */
+  #page-dashboard .page-title,
+  #page-dashboard h1,#page-dashboard h2,#page-dashboard h3,
+  #page-dashboard .text-white,#page-dashboard .text-slate-100,
+  #page-dashboard .text-slate-200,#page-dashboard .text-slate-300,
+  #page-dashboard .text-slate-400{color:#1e293b!important;}
+  #page-dashboard .text-slate-500,#page-dashboard .text-slate-600,
+  #page-dashboard .text-slate-700{color:#475569!important;}
+  #page-dashboard .app-topbar .text-white,
+  #page-dashboard .app-topbar .text-slate-100,
+  #page-dashboard .app-topbar .text-slate-200{color:#334155!important;}
+  #page-dashboard [style*="color:#fff"],
+  #page-dashboard [style*="color: #fff"],
+  #page-dashboard [style*="color:white"]{color:#334155!important;}
+  #page-dashboard .grad-btn,
+  #page-dashboard button.grad-btn,
+  #page-dashboard .side-menu.active .side-icon,
+  #page-dashboard .profile-avatar{color:#fff!important;}
+  #page-landing [style*="color:#fff"],
+  #page-landing [style*="color: #fff"],
+  #page-landing [style*="color:white"]{color:#172033!important;}
+  #page-landing .grad-btn,#page-landing button.grad-btn{color:#fff!important;}
+  #page-dashboard .device-edit-input{background:#fff!important;color:#1e293b!important;border-color:#cbd5e1!important;}
+  #page-dashboard .device-edit-btn{color:#6d28d9!important;}
+  #page-dashboard .device-save-btn{color:#047857!important;}
+  #page-dashboard .device-cancel-btn{color:#be123c!important;}
+  @media(max-width:520px){#page-dashboard .app-sidebar{box-shadow:12px 0 32px rgba(15,23,42,.12)!important;}}
+
 </style>
 </head>
 <body>
 
-<!-- ================= LANDING PAGE ================= -->
+<!-- Popup status online -->
+<div id="online-status-popup" class="online-popup" role="status" aria-live="polite">
+  <span class="online-popup-dot"></span>
+  <div>
+    <div id="online-popup-title" class="online-popup-title">Lola Sedang Online</div>
+    <div class="online-popup-sub">Status perangkat terdeteksi aktif</div>
+  </div>
+  <button type="button" class="online-popup-close" onclick="hideOnlinePopup()" aria-label="Tutup">×</button>
+</div>
+
+
+<!-- ================= BIOMETRIC LOGIN PAGE ================= -->
 <section id="page-landing" class="archive-bg flex items-center justify-center px-5 py-10">
   <div class="relative z-10 w-full max-w-md">
-    <div class="card-glass rounded-3xl px-7 py-10 text-center shadow-2xl">
-      <div class="flex justify-center mb-6">
-        <svg class="db-icon" width="64" height="64" viewBox="0 0 24 24" fill="none">
-          <defs>
-            <linearGradient id="dbg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#6366f1"/>
-              <stop offset="1" stop-color="#22d3ee"/>
-            </linearGradient>
-          </defs>
-          <ellipse cx="12" cy="5" rx="8" ry="3" fill="url(#dbg)"/>
-          <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
-          <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
-        </svg>
+    <div class="card-glass rounded-3xl px-7 py-9 text-center shadow-2xl">
+
+      <div class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-5 text-[9px] font-extrabold tracking-[.16em] uppercase text-violet-200"
+           style="background:rgba(139,92,246,.10);border:1px solid rgba(196,181,253,.18);">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        Sistem Internal · Akses Aman
       </div>
-      <h1 class="text-3xl font-extrabold leading-tight grad-text mb-3">
-        SELAMAT DATANG<br>DI SISTEM<br>INTERNAL
+
+      <div class="flex justify-center mb-5">
+        <div class="bio-icon" style="width:68px;height:68px;border-radius:20px;">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none"
+               stroke="url(#bioGradient)" stroke-width="1.8" stroke-linecap="round">
+            <defs>
+              <linearGradient id="bioGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#d34dd2"/>
+                <stop offset="1" stop-color="#592693"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 3a7 7 0 0 0-7 7"/>
+            <path d="M12 6a4 4 0 0 0-4 4"/>
+            <path d="M12 9a1 1 0 0 0-1 1"/>
+            <path d="M19 10a7 7 0 0 0-7-7"/>
+            <path d="M17 14a5 5 0 0 1-10 0"/>
+            <path d="M12 13v8"/>
+            <path d="M15 13a3 3 0 0 1-6 0"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1 id="auth-title" class="text-2xl font-extrabold leading-tight grad-text mb-3">
+        Akses Aman
       </h1>
-      <p class="text-slate-400 text-sm mb-8 leading-relaxed">
-        Database Pribadi Lola Dwi Setiawan | Di Buat : 20 Agustus 2026
+      <p id="auth-desc" class="text-slate-400 text-sm mb-7 leading-relaxed">
+        Gunakan sidik jari atau wajah untuk masuk ke sistem.
       </p>
-      <button onclick="goDashboard()"
-        class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px]">
-        Mulai Akses
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-          <path d="M5 12h14M13 5l7 7-7 7"/>
-        </svg>
-      </button>
+
+      <!-- Pilihan user sebelum daftar atau login -->
+      <div id="bio-user-panel" class="text-left">
+        <div class="text-[12px] text-slate-300 font-semibold mb-3 text-center">
+          Pilih user untuk melanjutkan
+        </div>
+        <div class="grid grid-cols-1 gap-3 mb-3">
+          <button type="button" onclick="chooseBiometricUser('wisnu')"
+            class="bio-choice rounded-2xl p-4 border border-slate-700 bg-slate-900 text-slate-200 text-left flex items-center gap-3">
+            <span class="bio-icon">👨‍💻</span>
+            <span><span class="block font-bold text-[13px]">Programmer</span><span class="block text-[11px] text-slate-400">Wisnu Mustika Adhi</span></span>
+          </button>
+          <button type="button" onclick="chooseBiometricUser('lola')"
+            class="bio-choice rounded-2xl p-4 border border-slate-700 bg-slate-900 text-slate-200 text-left flex items-center gap-3">
+            <span class="bio-icon">👑</span>
+            <span><span class="block font-bold text-[13px]">Pemilik Aplikasi</span><span class="block text-[11px] text-slate-400">Lola Dwi Setiawan</span></span>
+          </button>
+          <button type="button" onclick="chooseBiometricUser('other')"
+            class="bio-choice rounded-2xl p-4 border border-slate-700 bg-slate-900 text-slate-200 text-left flex items-center gap-3">
+            <span class="bio-icon">👤</span>
+            <span><span class="block font-bold text-[13px]">User Lain</span><span class="block text-[11px] text-slate-400">Pengguna lainnya</span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pilihan metode pertama kali -->
+      <div id="bio-register-panel" class="hidden text-left">
+        <div class="text-[12px] text-slate-300 font-semibold mb-3 text-center">
+          Daftarkan metode keamanan perangkat
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <button type="button" id="choice-fingerprint"
+            onclick="selectBiometricChoice('fingerprint')"
+            class="bio-choice rounded-2xl p-4 border border-slate-700 bg-slate-900 text-slate-200 text-center">
+            <div class="flex justify-center mb-2">
+              <div class="bio-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <path d="M12 3a7 7 0 0 0-7 7"/>
+                  <path d="M12 6a4 4 0 0 0-4 4"/>
+                  <path d="M12 9a1 1 0 0 0-1 1"/>
+                  <path d="M19 10a7 7 0 0 0-7-7"/>
+                  <path d="M17 14a5 5 0 0 1-10 0"/>
+                  <path d="M12 13v8"/>
+                </svg>
+              </div>
+            </div>
+            <div class="font-bold text-[13px]">Sidik Jari</div>
+            <div class="text-[10px] text-slate-500 mt-1">Gunakan sensor perangkat</div>
+          </button>
+
+          <button type="button" id="choice-face"
+            onclick="selectBiometricChoice('face')"
+            class="bio-choice rounded-2xl p-4 border border-slate-700 bg-slate-900 text-slate-200 text-center">
+            <div class="flex justify-center mb-2">
+              <div class="bio-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <path d="M8 3H6a3 3 0 0 0-3 3v2"/>
+                  <path d="M16 3h2a3 3 0 0 1 3 3v2"/>
+                  <path d="M8 21H6a3 3 0 0 1-3-3v-2"/>
+                  <path d="M16 21h2a3 3 0 0 0 3-3v-2"/>
+                  <circle cx="9" cy="10" r="1"/>
+                  <circle cx="15" cy="10" r="1"/>
+                  <path d="M8.5 15a5 5 0 0 0 7 0"/>
+                </svg>
+              </div>
+            </div>
+            <div class="font-bold text-[13px]">Wajah</div>
+            <div class="text-[10px] text-slate-500 mt-1">Gunakan Face ID / wajah</div>
+          </button>
+        </div>
+
+        <button id="btn-register-biometric" type="button" onclick="registerBiometric()"
+          class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white text-[14px] disabled:opacity-40"
+          disabled>
+          Daftar & Aktifkan
+        </button>
+
+        <button type="button" onclick="backToUserSelection()" class="w-full mt-3 text-[11px] text-slate-500 underline">Ganti user</button>
+        <p class="text-[10px] text-slate-500 mt-3 leading-relaxed text-center">
+          Data sidik jari/wajah tidak dikirim ke aplikasi. Perangkat hanya memberikan hasil verifikasi biometrik melalui sistem keamanan bawaan.
+        </p>
+      </div>
+
+      <!-- Login setelah sudah terdaftar -->
+      <div id="bio-login-panel" class="hidden">
+        <button id="btn-biometric-login" type="button" onclick="loginWithBiometric()"
+          class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[14px]">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3a7 7 0 0 0-7 7"/>
+            <path d="M12 6a4 4 0 0 0-4 4"/>
+            <path d="M12 9a1 1 0 0 0-1 1"/>
+            <path d="M19 10a7 7 0 0 0-7-7"/>
+            <path d="M17 14a5 5 0 0 1-10 0"/>
+            <path d="M12 13v8"/>
+          </svg>
+          Verifikasi & Masuk
+        </button>
+
+        <div class="flex items-center justify-center gap-4 mt-3">
+          <button type="button" onclick="resetBiometricRegistration()" class="text-[11px] text-slate-500 underline">Daftarkan ulang metode keamanan</button>
+          <button type="button" onclick="backToUserSelection()" class="text-[11px] text-slate-500 underline">Ganti user</button>
+        </div>
+      </div>
+
+      <div id="bio-status" class="hidden mt-4 rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2.5 text-[11px] text-slate-400"></div>
+      <div class="security-caption"><span class="secure-dot"></span><span>Autentikasi aman melalui perangkat Anda</span></div>
     </div>
   </div>
 </section>
@@ -275,52 +841,134 @@
 </section>
 
 <!-- ================= DASHBOARD PAGE ================= -->
-<section id="page-dashboard" class="hidden min-h-screen" style="background:var(--ink-900)">
+<section id="page-dashboard" class="hidden min-h-screen">
+  <div class="app-shell">
 
-  <!-- Top header (mirrors landing palette) -->
-  <header class="px-5 pt-6 pb-5" style="background:linear-gradient(180deg, var(--ink-800), var(--ink-900))">
-    <div class="flex items-center gap-3">
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-        <ellipse cx="12" cy="5" rx="8" ry="3" fill="url(#dbg)"/>
-        <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
-        <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="url(#dbg)" stroke-width="1.6" fill="none"/>
-      </svg>
-      <div class="flex-1">
-        <div class="font-bold text-white text-[15px] leading-tight">Database Pribadi Lola Dwi Setiawan</div>
-        <div class="text-[11px] text-slate-400">Sistem Tanggung Renteng</div>
+    <!-- SIDEBAR -->
+    <aside id="app-sidebar" class="app-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="5" rx="8" ry="3" stroke="#e879f9" stroke-width="1.7"/>
+            <path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5" stroke="#d34dd2" stroke-width="1.7"/>
+            <path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" stroke="#8b5cf6" stroke-width="1.7"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="text-white font-extrabold text-[13px] truncate">Database Pribadi</div>
+          <div class="text-slate-500 text-[10px] truncate">Sistem Tanggung Renteng</div>
+        </div>
       </div>
-      <button onclick="logout()" title="Keluar"
-        class="flex items-center gap-1 rounded-lg px-3 py-2 text-[11px] font-semibold text-red-400 border border-red-400/30 bg-red-400/10">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <path d="M16 17l5-5-5-5"/>
-          <path d="M21 12H9"/>
-        </svg>
-        Keluar
+
+      <div class="sidebar-label">Menu Utama</div>
+
+      <button id="tab-dashboard" onclick="switchTab('dashboard')" class="side-menu active">
+        <span class="side-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/>
+            <rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>
+          </svg>
+        </span>
+        <span>Dashboard</span>
       </button>
-    </div>
-  </header>
 
-  <!-- 3 Menu tabs -->
-  <nav class="px-4 -mt-1 mb-4">
-    <div class="grid grid-cols-3 gap-2 card-glass rounded-2xl p-1.5">
-      <button id="tab-dashboard" onclick="switchTab('dashboard')" class="tab-btn active rounded-xl py-2.5 text-[12px] font-semibold text-slate-300">Dashboard</button>
-      <button id="tab-input" onclick="switchTab('input')" class="tab-btn rounded-xl py-2.5 text-[12px] font-semibold text-slate-300">Input Data</button>
-      <button id="tab-rekap" onclick="switchTab('rekap')" class="tab-btn rounded-xl py-2.5 text-[12px] font-semibold text-slate-300">Rekapan</button>
-    </div>
-  </nav>
+      <button id="tab-input" onclick="switchTab('input')" class="side-menu">
+        <span class="side-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+          </svg>
+        </span>
+        <span>Input Data</span>
+      </button>
 
-  <main class="px-4 pb-16">
+      <button id="tab-rekap" onclick="switchTab('rekap')" class="side-menu">
+        <span class="side-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V5"/><path d="M4 19h17"/><path d="m7 15 4-4 3 3 5-7"/>
+          </svg>
+        </span>
+        <span>Rekapan</span>
+      </button>
 
+      <button id="tab-security" onclick="requestSecurityAccess()" class="side-menu">
+        <span class="side-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3l7 3v5c0 4.7-2.9 8.2-7 10-4.1-1.8-7-5.3-7-10V6l7-3z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </span>
+        <span>Verifikasi Keamanan</span>
+      </button>
+
+      <div class="sidebar-bottom">
+        <div class="security-mini">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center bg-emerald-500/10 text-emerald-400">✓</span>
+            <div>
+              <div class="text-[10px] font-bold text-emerald-300">Akses Terlindungi</div>
+              <div class="text-[9px] text-slate-500">Biometrik aktif</div>
+            </div>
+          </div>
+        </div>
+        <button onclick="logout()" class="side-logout">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>
+          </svg>
+          Keluar dari Sistem
+        </button>
+      </div>
+    </aside>
+
+    <div id="mobile-overlay" class="mobile-overlay" onclick="toggleSidebar(false)"></div>
+
+    <!-- MAIN -->
+    <div class="app-main">
+      <header class="app-topbar">
+        <button class="mobile-menu-btn top-action" onclick="toggleSidebar()" aria-label="Buka menu">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <div class="min-w-0">
+          <div class="text-white font-extrabold text-[14px] truncate">Database Pribadi Lola Dwi Setiawan</div>
+          <div class="text-[10px] text-slate-500">Panel Tanggung Renteng</div>
+          <div class="flex items-center gap-1.5 mt-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[9px] text-emerald-300 font-semibold">Online • </span>
+            <span id="online-device-name" class="text-[9px] text-slate-400 truncate max-w-[220px]">Membaca perangkat...</span>
+          </div>
+        </div>
+
+        <div class="topbar-spacer"></div>
+
+
+      </header>
+
+      <main class="content-wrap">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">Sistem Internal</div>
+            <div id="page-title" class="page-title">Dashboard</div>
+            <div id="page-subtitle" class="page-subtitle">Ringkasan data tanggung renteng dan aktivitas terbaru.</div>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl border border-emerald-500/15 bg-emerald-500/5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[10px] text-emerald-300 font-semibold">Sistem Online</span>
+          </div>
+        </div>
+
+        <div id="dashboard-content-wrap">
     <!-- ===== TAB: DASHBOARD ===== -->
     <div id="content-dashboard" class="fade-in">
       <div class="grid grid-cols-2 gap-3 mb-4">
-        <div class="card-glass rounded-2xl p-4">
-          <div class="text-[11px] text-slate-400 mb-1">Total Catatan Tanggung Renteng</div>
+        <div class="modern-card stat-card">
+          <div class="stat-icon">📊</div><div class="text-[11px] text-slate-400 mb-1">Total Catatan Tanggung Renteng</div>
           <div id="stat-total" class="text-2xl font-extrabold grad-text">0</div>
         </div>
-        <div class="card-glass rounded-2xl p-4">
-          <div class="text-[11px] text-slate-400 mb-1">Bulan Ini</div>
+        <div class="modern-card stat-card">
+          <div class="stat-icon">📅</div><div class="text-[11px] text-slate-400 mb-1">Bulan Ini</div>
           <div id="stat-bulan" class="text-2xl font-extrabold grad-text">0</div>
         </div>
         <div class="card-glass rounded-2xl p-4 col-span-2">
@@ -332,7 +980,7 @@
           <div id="stat-center" class="text-sm font-semibold text-slate-200">Belum ada data</div>
         </div>
       </div>
-      <div class="card-glass rounded-2xl p-4">
+      <div class="modern-card rounded-2xl p-4">
         <div class="text-[12px] font-semibold text-slate-300 mb-3">Aktivitas Terbaru</div>
         <div id="recent-list" class="space-y-2 text-[12px] text-slate-400">Belum ada data.</div>
       </div>
@@ -340,7 +988,7 @@
 
     <!-- ===== TAB: INPUT DATA TANGGUNG RENTENG ===== -->
     <div id="content-input" class="hidden fade-in">
-      <div class="card-glass rounded-2xl p-5">
+      <div class="modern-card rounded-2xl p-5">
         <h2 class="text-sm font-bold text-slate-200 mb-4">Input Data Tanggung Renteng</h2>
         <form id="form-tr" class="space-y-3" onsubmit="return simpanData(event)">
 
@@ -418,9 +1066,61 @@
       </div>
     </div>
 
+    <!-- ===== TAB: VERIFIKASI KEAMANAN ===== -->
+    <div id="content-security" class="hidden fade-in">
+      <!-- ===== MONITORING USER ONLINE SERVER ===== -->
+      <div class="modern-card rounded-2xl p-4 mb-3">
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <div>
+            <div class="text-white font-bold text-[14px]">Semua User Online</div>
+            <div class="text-[10px] text-slate-500">Daftar user aktif dari server monitoring</div>
+          </div>
+          <span id="online-count-badge" class="text-[10px] px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-300">0 online</span>
+        </div>
+        <div class="flex justify-end mb-3">
+          <button type="button" onclick="refreshOnlineUsers()" class="rounded-xl px-4 py-2.5 text-[11px] font-semibold text-slate-200" style="background:var(--ink-600);border:1px solid var(--line);">↻ Perbarui</button>
+        </div>
+        <div id="online-monitor-message" class="text-[10px] text-slate-500 mb-3">Status monitoring mengikuti URL yang diatur di skrip HTML.</div>
+        <div id="online-users-list" class="space-y-2">
+          <div class="text-[11px] text-slate-500 text-center py-3">Daftar user online akan tampil setelah login.</div>
+        </div>
+      </div>
+
+      <div class="modern-card rounded-2xl p-4 mb-3">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(211,77,210,.12);border:1px solid rgba(211,77,210,.2);">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-fuchsia-400" stroke-width="1.8" stroke-linecap="round">
+              <path d="M12 3l7 3v5c0 4.7-2.9 8.2-7 10-4.1-1.8-7-5.3-7-10V6l7-3z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-white font-bold text-[15px]">Verifikasi Keamanan</div>
+            <div class="text-[10px] text-slate-500">Informasi autentikasi dan perangkat yang digunakan saat login</div>
+          </div>
+        </div>
+        <div id="security-current" class="space-y-2">Memuat informasi keamanan...</div>
+      </div>
+
+      <div class="modern-card rounded-2xl p-4 mb-3">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-[12px] font-semibold text-slate-300">Riwayat Verifikasi Login</div>
+          <button type="button" onclick="clearSecurityHistory()" class="text-[10px] text-red-400">Hapus Riwayat</button>
+        </div>
+        <div id="security-history" class="space-y-2">Belum ada riwayat.</div>
+      </div>
+
+      <div class="rounded-2xl p-4 border border-amber-500/20 bg-amber-500/5">
+        <div class="text-[11px] font-semibold text-amber-300 mb-1">🔐 Catatan privasi</div>
+        <div class="text-[10px] leading-relaxed text-slate-500">
+          Sidik jari atau wajah asli tidak dibaca, dikirim, atau disimpan oleh aplikasi. Sistem hanya menyimpan identitas Passkey/WebAuthn, metode yang dipilih, serta informasi perangkat dan waktu verifikasi.
+        </div>
+      </div>
+    </div>
+
     <!-- ===== TAB: REKAPAN ===== -->
     <div id="content-rekap" class="hidden fade-in">
-      <div class="card-glass rounded-2xl p-4 mb-3">
+      <div class="modern-card rounded-2xl p-4 mb-3">
         <input type="text" id="search-rekap" oninput="renderRekap()" placeholder="Cari nama anggota / center..."
           class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-700 bg-slate-100">
       </div>
@@ -428,7 +1128,52 @@
     </div>
 
   </main>
+      </div>
+    </div>
+  </div>
 </section>
+
+
+<!-- ===== SECURITY PASSWORD MODAL ===== -->
+<div id="security-password-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4"
+     style="background:rgba(0,0,0,.72);backdrop-filter:blur(8px);">
+  <div class="modern-card w-full max-w-sm rounded-3xl p-5 shadow-2xl">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-11 h-11 rounded-2xl flex items-center justify-center"
+           style="background:linear-gradient(135deg,rgba(211,77,210,.18),rgba(89,38,147,.25));border:1px solid rgba(211,77,210,.25);">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e879f9" stroke-width="2">
+          <rect x="4" y="10" width="16" height="10" rx="2"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          <circle cx="12" cy="15" r="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-white font-extrabold text-[15px]">Verifikasi Keamanan</div>
+        <div class="text-[10px] text-slate-500">Menu ini membutuhkan password.</div>
+      </div>
+    </div>
+
+    <label class="block text-[10px] font-bold text-slate-400 mb-2">Password</label>
+    <input id="security-password-input" type="password" autocomplete="current-password"
+           class="w-full rounded-xl px-3 py-3 bg-slate-950/70 border border-slate-700/70 text-white outline-none focus:border-fuchsia-500"
+           placeholder="Masukkan password"
+           onkeydown="if(event.key==='Enter') verifySecurityPassword()">
+
+    <div id="security-password-error" class="hidden text-[10px] text-rose-400 mt-2"></div>
+
+    <div class="flex gap-2 mt-4">
+      <button onclick="closeSecurityPasswordModal()"
+              class="flex-1 rounded-xl py-3 text-[11px] font-bold text-slate-300 bg-white/5 border border-white/10">
+        Batal
+      </button>
+      <button onclick="verifySecurityPassword()"
+              class="flex-1 rounded-xl py-3 text-[11px] font-bold text-white"
+              style="background:linear-gradient(135deg,#d34dd2,#592693);">
+        Buka Menu
+      </button>
+    </div>
+  </div>
+</div>
 
 <div id="toast" class="toast rounded-xl px-4 py-3 text-[13px] text-slate-100"></div>
 
@@ -512,6 +1257,125 @@
   // Isi link Web App hasil deploy Code_TanggungRenteng.gs di sini:
   const URL_GAS = 'https://script.google.com/macros/s/AKfycbzYpHPjqAD876a4x7JIST5R45odijyXbXkB5lKthmSsu_RiyTZ_ELYStjQH9vIWAR-7fA/exec';
 
+  // ===== KONFIGURASI MONITORING ONLINE =====
+  // Daftar user aktif dari server monitoring di bawah ini.
+  // URL harus berakhiran /exec. Nama user dapat diatur per salinan HTML.
+  const ONLINE_MONITOR_URL = 'https://script.google.com/macros/s/AKfycbwJaTMgkF_RBO8OhAlkBiByCA4L5DC3JG2kAOzUVf8egvU74W_n2xd__1OumW0Nzog9gw/exec';
+  // Nama user mengikuti profil yang dipilih saat login, bukan nama tetap.
+  const ONLINE_MONITOR_SESSION_KEY = 'tr_ciledug_online_monitor_session_v2';
+  let onlineHeartbeatTimer = null;
+  let onlineListTimer = null;
+  let onlineJsonpCounter = 0;
+
+  function getOnlineMonitorUrl(){
+    return String(ONLINE_MONITOR_URL || '').trim().replace(/\/$/, '');
+  }
+  function getOnlineMonitorName(){
+    // selectedUserId ditentukan saat pengguna memilih Programmer/Pemilik/User Lain.
+    const user = (typeof biometricUser === 'function') ? biometricUser() : null;
+    return String(user?.name || '').trim();
+  }
+  function getOnlineSessionId(){
+    const user = (typeof biometricUser === 'function') ? biometricUser() : null;
+    const perUserKey = ONLINE_MONITOR_SESSION_KEY + '_' + (user?.key || 'unknown');
+    let id = sessionStorage.getItem(perUserKey);
+    if(!id){
+      id = 'sess_' + (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+      sessionStorage.setItem(perUserKey, id);
+    }
+    return id;
+  }
+  function jsonpOnlineRequest(params, timeoutMs=12000){
+    return new Promise((resolve, reject)=>{
+      const base = getOnlineMonitorUrl();
+      if(!base || base.indexOf('MASUKKAN_URL_WEB_APP') >= 0) return reject(new Error('URL monitoring belum diisi di bagian konfigurasi HTML.'));
+      const callbackName = '__onlineMonitorCb' + Date.now() + '_' + (++onlineJsonpCounter);
+      const script = document.createElement('script');
+      let done = false;
+      const cleanup = ()=>{
+        if(done) return; done = true;
+        clearTimeout(timer);
+        try{ delete window[callbackName]; }catch(e){ window[callbackName] = undefined; }
+        if(script.parentNode) script.parentNode.removeChild(script);
+      };
+      const timer = setTimeout(()=>{ cleanup(); reject(new Error('Server monitoring tidak merespons. Periksa URL/deployment.')); }, timeoutMs);
+      window[callbackName] = data=>{ cleanup(); resolve(data); };
+      const query = new URLSearchParams({...params, callback: callbackName, _ts: Date.now()});
+      script.onerror = ()=>{ cleanup(); reject(new Error('Gagal menghubungi server monitoring.')); };
+      script.src = base + (base.includes('?') ? '&' : '?') + query.toString();
+      document.head.appendChild(script);
+    });
+  }
+  async function sendOnlineHeartbeat(){
+    const url = getOnlineMonitorUrl();
+    const name = getOnlineMonitorName();
+    if(!url || url.indexOf('MASUKKAN_URL_WEB_APP') >= 0 || !name || document.getElementById('page-dashboard')?.classList.contains('hidden')) return;
+    try{
+      const device = getSecurityDeviceValue ? getSecurityDeviceValue() : detectDeviceName();
+      const result = await jsonpOnlineRequest({action:'heartbeat', sessionId:getOnlineSessionId(), userId:name, userName:name, device});
+      if(!result || !result.ok) throw new Error(result?.error || 'Heartbeat gagal.');
+      const msg = document.getElementById('online-monitor-message');
+      if(msg){ msg.textContent = 'Terhubung ke server monitoring · pembaruan otomatis aktif.'; msg.className='text-[10px] text-emerald-300 mb-3'; }
+    }catch(err){
+      const msg = document.getElementById('online-monitor-message');
+      if(msg){ msg.textContent = err.message || 'Gagal mengirim status online.'; msg.className='text-[10px] text-amber-300 mb-3'; }
+    }
+  }
+  async function refreshOnlineUsers(){
+    const listEl = document.getElementById('online-users-list');
+    const countEl = document.getElementById('online-count-badge');
+    if(!listEl) return;
+    if(!getOnlineMonitorUrl() || getOnlineMonitorUrl().indexOf('MASUKKAN_URL_WEB_APP') >= 0){
+      listEl.innerHTML = '<div class=\"text-[11px] text-slate-500 text-center py-3\">URL monitoring belum diisi pada konstanta ONLINE_MONITOR_URL di skrip HTML.</div>';
+      if(countEl) countEl.textContent = '0 online';
+      return;
+    }
+    listEl.innerHTML = '<div class=\"text-[11px] text-slate-500 text-center py-3\">Memuat daftar user online...</div>';
+    try{
+      const result = await jsonpOnlineRequest({action:'listOnline'});
+      if(!result || !result.ok) throw new Error(result?.error || 'Gagal membaca daftar online.');
+      const users = Array.isArray(result.users) ? result.users : [];
+      if(countEl) countEl.textContent = users.length + ' online';
+      if(!users.length){
+        listEl.innerHTML = '<div class=\"text-[11px] text-slate-500 text-center py-3\">Belum ada user yang sedang online.</div>';
+        return;
+      }
+      listEl.innerHTML = users.map(user=>{
+        const name = escapeHtmlAttr(user.userName || 'User');
+        const device = escapeHtmlAttr(user.device || 'Perangkat tidak diketahui');
+        let seen = '-';
+        try{ seen = new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(user.lastSeen)); }catch(e){}
+        return `<div class=\"rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-3 flex items-start gap-2\"><span class=\"online-popup-dot mt-1\" style=\"width:8px;height:8px;box-shadow:none\"></span><div class=\"flex-1 min-w-0\"><div class=\"text-[11px] font-semibold text-slate-100 break-words\">${name}</div><div class=\"text-[10px] text-slate-400 mt-1\">${device}</div><div class=\"text-[9px] text-slate-500 mt-1\">Aktif terakhir: ${seen}</div></div><span class=\"text-[9px] text-emerald-300\">Online</span></div>`;
+      }).join('');
+    }catch(err){
+      listEl.innerHTML = `<div class=\"text-[10px] text-red-300 text-center py-3\">${escapeHtmlAttr(err.message || 'Gagal memuat daftar online.')}</div>`;
+      if(countEl) countEl.textContent = '— online';
+    }
+  }
+  function startOnlineMonitoring(){
+    if(onlineHeartbeatTimer) clearInterval(onlineHeartbeatTimer);
+    if(onlineListTimer) clearInterval(onlineListTimer);
+    if(!getOnlineMonitorUrl() || getOnlineMonitorUrl().indexOf('MASUKKAN_URL_WEB_APP') >= 0 || !getOnlineMonitorName()) return;
+    sendOnlineHeartbeat();
+    refreshOnlineUsers();
+    onlineHeartbeatTimer = setInterval(sendOnlineHeartbeat, 30000);
+    onlineListTimer = setInterval(refreshOnlineUsers, 15000);
+  }
+  async function stopOnlineMonitoring(){
+    if(onlineHeartbeatTimer) clearInterval(onlineHeartbeatTimer); onlineHeartbeatTimer=null;
+    if(onlineListTimer) clearInterval(onlineListTimer); onlineListTimer=null;
+    if(!getOnlineMonitorUrl()) return;
+    try{ await jsonpOnlineRequest({action:'logout', sessionId:getOnlineSessionId()}); }catch(e){}
+  }
+  window.addEventListener('beforeunload', ()=>{
+    // Timeout server tetap menjadi fallback jika browser menutup tab tanpa sempat mengirim logout.
+    if(getOnlineMonitorUrl() && getOnlineSessionId()) {
+      const url = getOnlineMonitorUrl();
+      const query = new URLSearchParams({action:'logout',sessionId:getOnlineSessionId(),userId:getOnlineMonitorName(),userName:getOnlineMonitorName()});
+      const img = new Image(); img.src = url + '?' + query.toString();
+    }
+  });
+
   function cekUrlGas(){
     if(!URL_GAS){
       showToast('URL_GAS belum diisi. Hubungi admin untuk memasang link Web App.');
@@ -532,6 +1396,529 @@
       return [];
     }
   }
+
+
+  // ===== BIOMETRIC / PASSKEY AUTHENTICATION =====
+  // WebAuthn memakai biometrik bawaan perangkat (sidik jari / Face ID / Windows Hello).
+  // Browser tidak memberikan data biometrik mentah ke halaman.
+  const PASSKEY_STORAGE_KEY = 'tr_ciledug_passkey_credential_v1';
+  const SECURITY_PROFILE_KEY = 'tr_ciledug_security_profile_v1';
+  const SECURITY_HISTORY_KEY = 'tr_ciledug_security_history_v1';
+  const BIOMETRIC_USERS = {
+    wisnu: { role: 'Programmer', name: 'Wisnu Mustika Adhi', key: 'wisnu-mustika-adhi' },
+    lola: { role: 'Pemilik Aplikasi', name: 'Lola Dwi Setiawan', key: 'lola-dwi-setiawan' },
+    other: { role: 'User Lain', name: 'User Lain', key: 'user-lain' }
+  };
+  let selectedUserId = '';
+  let selectedBiometric = '';
+
+  function biometricUser(){
+    return BIOMETRIC_USERS[selectedUserId] || null;
+  }
+  function scopedStorageKey(base){
+    const user = biometricUser();
+    return base + (user ? '_' + user.key : '');
+  }
+
+  function getSecurityProfile(){
+    try {
+      const scoped = localStorage.getItem(scopedStorageKey(SECURITY_PROFILE_KEY));
+      if(scoped) return JSON.parse(scoped);
+      // Migrasi kompatibilitas: profil lama dianggap milik pemilik aplikasi.
+      if(selectedUserId === 'lola') return JSON.parse(localStorage.getItem(SECURITY_PROFILE_KEY) || 'null');
+      return null;
+    } catch(e){ return null; }
+  }
+
+  function getSecurityHistory(){
+    try {
+      const scoped = localStorage.getItem(scopedStorageKey(SECURITY_HISTORY_KEY));
+      if(scoped) return JSON.parse(scoped);
+      if(selectedUserId === 'lola') return JSON.parse(localStorage.getItem(SECURITY_HISTORY_KEY) || '[]');
+      return [];
+    } catch(e){ return []; }
+  }
+
+  function saveSecurityProfile(profile){
+    localStorage.setItem(scopedStorageKey(SECURITY_PROFILE_KEY), JSON.stringify(profile));
+  }
+
+  function saveSecurityLogin(profile){
+    const history = getSecurityHistory();
+    history.unshift(profile);
+    localStorage.setItem(scopedStorageKey(SECURITY_HISTORY_KEY), JSON.stringify(history.slice(0, 30)));
+    saveSecurityProfile(profile);
+  }
+
+  function formatSecurityDate(iso){
+    if(!iso) return '-';
+    try { return new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeStyle:'medium'}).format(new Date(iso)); }
+    catch(e){ return iso; }
+  }
+
+  function maskCredential(id){
+    if(!id) return '-';
+    return id.length > 16 ? id.slice(0,8) + '••••••' + id.slice(-8) : id;
+  }
+
+  async function getDeviceDetails(){
+    const ua = navigator.userAgent || '';
+    let browser = 'Browser tidak diketahui';
+    if(/Edg\//i.test(ua)) browser='Microsoft Edge';
+    else if(/OPR\//i.test(ua)) browser='Opera';
+    else if(/Chrome\//i.test(ua)) browser='Google Chrome';
+    else if(/Firefox\//i.test(ua)) browser='Mozilla Firefox';
+    else if(/Safari\//i.test(ua) && !/Chrome\//i.test(ua)) browser='Safari';
+
+    let os = 'Sistem operasi tidak diketahui';
+    if(/Android/i.test(ua)){
+      const m=ua.match(/Android\s([\d.]+)/i);
+      os='Android' + (m ? ' ' + m[1] : '');
+    } else if(/iPhone|iPad|iPod/i.test(ua)){
+      os='iOS/iPadOS';
+    } else if(/Windows NT/i.test(ua)){
+      os='Windows';
+    } else if(/Mac OS X/i.test(ua)){
+      os='macOS';
+    } else if(/Linux/i.test(ua)){
+      os='Linux';
+    }
+
+    let device='Perangkat tidak diketahui';
+    if(/Android/i.test(ua)){
+      const m=ua.match(/Android[^;)]*;\s*(?:[a-z]{2}-[A-Z]{2};\s*)?(?:wv;\s*)?([^;)]+?)(?:\s+Build[ /][^;)]+)?[;) ]/i);
+      if(m && m[1] && !/Linux|wv|Mobile/i.test(m[1])) device=m[1].trim();
+      else device='Perangkat Android';
+    } else if(/iPhone/i.test(ua)) device='iPhone';
+    else if(/iPad/i.test(ua)) device='iPad';
+    else if(/Windows/i.test(ua)) device='PC Windows';
+    else if(/Macintosh/i.test(ua)) device='Mac';
+
+    let platform = navigator.platform || '-';
+    let model = '-';
+    let uaMobile = null;
+    if(navigator.userAgentData){
+      try{
+        uaMobile = navigator.userAgentData.mobile ? 'Ya' : 'Tidak';
+        const high = await navigator.userAgentData.getHighEntropyValues(['model','platform','platformVersion','fullVersionList']);
+        if(high.model) model=high.model;
+        if(high.platform) platform=high.platform;
+        if(high.platformVersion && high.platform) os=high.platform + ' ' + high.platformVersion;
+        if(Array.isArray(high.fullVersionList) && high.fullVersionList.length){
+          const b=high.fullVersionList.find(x=>!/(Not_A Brand|Chromium)/i.test(x.brand)) || high.fullVersionList[0];
+          if(b?.brand) browser=b.brand + (b.version ? ' ' + b.version : '');
+        }
+      }catch(e){}
+    }
+
+    return {
+      device, model, os, browser, platform, uaMobile: uaMobile ?? (/Mobile/i.test(ua) ? 'Ya' : 'Tidak'),
+      screen: `${screen.width} × ${screen.height}`,
+      pixelRatio: window.devicePixelRatio || 1,
+      language: navigator.language || '-',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '-',
+      online: navigator.onLine ? 'Online' : 'Offline',
+      secure: window.isSecureContext ? 'Ya (HTTPS)' : 'Tidak',
+      touchPoints: navigator.maxTouchPoints ?? 0
+    };
+  }
+
+  async function recordSecurityEvent(type, method, credentialId){
+    try{
+      const device = await getDeviceDetails();
+      const saved = getSecurityProfile();
+      const event = {
+        event: type,
+        userId: selectedUserId,
+        userRole: biometricUser()?.role || '',
+        userName: biometricUser()?.name || '',
+        method: method || saved?.method || 'Biometrik perangkat',
+        credentialId: credentialId || saved?.credentialId || '',
+        timestamp: new Date().toISOString(),
+        device
+      };
+      if(type === 'login') saveSecurityLogin(event);
+      else saveSecurityProfile({...event, registeredAt:event.timestamp, lastLoginAt:saved?.lastLoginAt || ''});
+      renderSecurityPanel();
+    }catch(e){ console.error('Security info:', e); }
+  }
+
+  async function renderSecurityPanel(){
+    const current = document.getElementById('security-current');
+    const historyEl = document.getElementById('security-history');
+    if(!current || !historyEl) return;
+
+    const saved = getSecurityProfile();
+    const passkey = getSavedCredential();
+    if(!saved && !passkey){
+      current.innerHTML = '<div class="text-[11px] text-slate-500 text-center py-4">Belum ada data verifikasi keamanan. Daftarkan biometrik terlebih dahulu.</div>';
+      historyEl.innerHTML = '<div class="text-[11px] text-slate-500 text-center py-3">Belum ada riwayat login.</div>';
+      return;
+    }
+
+    const device = saved?.device || await getDeviceDetails();
+    const method = saved?.method || passkey?.method || 'Biometrik perangkat';
+    const cred = saved?.credentialId || passkey?.credentialId || '';
+    const history = getSecurityHistory();
+    const lastLogin = history[0]?.timestamp || saved?.lastLoginAt || '-';
+    const rows = [
+      ['Status', '<span class="text-emerald-400 font-semibold">✓ Terverifikasi</span>'],
+      ['Metode keamanan', method === 'fingerprint' ? '👆 Sidik Jari' : method === 'face' ? '🙂 Wajah' : '🔐 Biometrik perangkat'],
+      ['Device', `<span id="security-device-cell" class="device-value-wrap"><span class="device-name-text">${escapeHtmlAttr(getSecurityDeviceValue() || device.device || '-')}</span><button type="button" class="device-edit-btn" onclick="editSecurityDevice()" title="Edit nama device" aria-label="Edit nama device">✎</button></span>`],
+      ['Model', device.model || '-'],
+      ['Sistem Operasi', device.os || '-'],
+      ['Browser', device.browser || '-'],
+      ['Platform', device.platform || '-'],
+      ['Layar', device.screen || '-'],
+      ['Pixel Ratio', String(device.pixelRatio || '-')],
+      ['Bahasa', device.language || '-'],
+      ['Zona Waktu', device.timezone || '-'],
+      ['Touch Points', String(device.touchPoints ?? '-')],
+      ['Secure Context', device.secure || '-'],
+      ['Login Terakhir', formatSecurityDate(lastLogin)],
+      ['Credential ID', `<span class="font-mono text-[9px] break-all">${maskCredential(cred)}</span>`]
+    ];
+    current.innerHTML = rows.map(r=>`<div class="flex gap-3 py-2 border-b border-slate-800 last:border-0"><div class="w-[105px] shrink-0 text-[10px] text-slate-500">${r[0]}</div><div class="flex-1 text-[11px] text-slate-200 text-right break-words">${r[1]}</div></div>`).join('');
+
+    if(!history.length){
+      historyEl.innerHTML = '<div class="text-[11px] text-slate-500 text-center py-3">Belum ada riwayat login.</div>';
+    } else {
+      historyEl.innerHTML = history.map((h,i)=>{
+        const icon=h.method==='fingerprint'?'👆':h.method==='face'?'🙂':'🔐';
+        return `<div class="rounded-xl border border-slate-800 bg-slate-900/60 p-3"><div class="flex items-start gap-2"><div class="text-lg">${icon}</div><div class="flex-1 min-w-0"><div class="flex justify-between gap-2"><div class="text-[11px] font-semibold text-slate-200">${h.event==='login'?'Login berhasil':'Pendaftaran keamanan'}</div><div class="text-[9px] text-slate-500">${formatSecurityDate(h.timestamp)}</div></div><div class="text-[10px] text-slate-400 mt-1">${h.device?.device || '-'} · ${h.device?.os || '-'}</div><div class="text-[9px] text-slate-500 mt-1">${h.device?.browser || '-'} · ${h.method==='fingerprint'?'Sidik Jari':h.method==='face'?'Wajah':'Biometrik perangkat'}</div></div></div></div>`;
+      }).join('');
+    }
+  }
+
+  function clearSecurityHistory(){
+    if(!confirm('Hapus semua riwayat verifikasi login pada perangkat ini?')) return;
+    if(selectedUserId && biometricUser()) localStorage.removeItem(scopedStorageKey(SECURITY_HISTORY_KEY));
+    else localStorage.removeItem(SECURITY_HISTORY_KEY);
+    renderSecurityPanel();
+    showToast('Riwayat verifikasi dihapus');
+  }
+
+  function isWebAuthnAvailable(){
+    return !!(window.PublicKeyCredential && navigator.credentials &&
+      typeof navigator.credentials.create === 'function' &&
+      typeof navigator.credentials.get === 'function');
+  }
+
+  function isWebAuthnSecureContext(){
+    // WebAuthn hanya tersedia pada secure context (HTTPS atau localhost).
+    return window.isSecureContext === true ||
+      location.hostname === 'localhost' ||
+      location.hostname === '127.0.0.1';
+  }
+
+  function setBioStatus(msg, isError=false){
+    const el = document.getElementById('bio-status');
+    if(!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    el.classList.toggle('text-red-400', !!isError);
+    el.classList.toggle('text-slate-400', !isError);
+  }
+
+  function base64UrlEncode(bytes){
+    let binary = '';
+    const arr = new Uint8Array(bytes);
+    for(let i=0;i<arr.length;i++) binary += String.fromCharCode(arr[i]);
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  function base64UrlDecode(str){
+    const pad = '='.repeat((4 - (str.length % 4)) % 4);
+    const base64 = str.replace(/-/g,'+').replace(/_/g,'/') + pad;
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  function randomBytes(length=32){
+    const bytes = new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    return bytes;
+  }
+
+  function getSavedCredential(){
+    if(!selectedUserId) return null;
+    try{
+      const scoped = localStorage.getItem(scopedStorageKey(PASSKEY_STORAGE_KEY));
+      if(scoped) return JSON.parse(scoped);
+      // Kredensial versi lama dipertahankan untuk akun pemilik aplikasi.
+      if(selectedUserId === 'lola') return JSON.parse(localStorage.getItem(PASSKEY_STORAGE_KEY) || 'null');
+      return null;
+    }catch(e){ return null; }
+  }
+
+  function chooseBiometricUser(userId){
+    if(!BIOMETRIC_USERS[userId]) return;
+    selectedUserId = userId;
+    selectedBiometric = '';
+    document.getElementById('bio-user-panel')?.classList.add('hidden');
+    document.getElementById('bio-register-panel')?.classList.add('hidden');
+    document.getElementById('bio-login-panel')?.classList.add('hidden');
+    document.getElementById('choice-fingerprint')?.classList.remove('selected');
+    document.getElementById('choice-face')?.classList.remove('selected');
+    const registerBtn = document.getElementById('btn-register-biometric');
+    if(registerBtn) registerBtn.disabled = true;
+    const user = biometricUser();
+    document.getElementById('auth-title').textContent = user.role;
+    document.getElementById('auth-desc').textContent = user.name;
+    setBioStatus('');
+    showBiometricScreen();
+  }
+
+  function backToUserSelection(){
+    selectedUserId = '';
+    selectedBiometric = '';
+    document.getElementById('bio-user-panel')?.classList.remove('hidden');
+    document.getElementById('bio-register-panel')?.classList.add('hidden');
+    document.getElementById('bio-login-panel')?.classList.add('hidden');
+    document.getElementById('auth-title').textContent = 'Pilih User';
+    document.getElementById('auth-desc').textContent = 'Pilih user sebelum mendaftar atau masuk menggunakan keamanan biometrik.';
+    setBioStatus('');
+  }
+
+  function selectBiometricChoice(type){
+    selectedBiometric = type;
+    document.getElementById('choice-fingerprint')?.classList.toggle('selected', type==='fingerprint');
+    document.getElementById('choice-face')?.classList.toggle('selected', type==='face');
+    const btn = document.getElementById('btn-register-biometric');
+    if(btn) btn.disabled = false;
+
+    setBioStatus(
+      type === 'fingerprint'
+        ? 'Sidik jari dipilih. Saat pendaftaran, perangkat akan meminta verifikasi sensor sidik jari.'
+        : 'Wajah dipilih. Saat pendaftaran, perangkat akan meminta Face ID / verifikasi wajah.'
+    );
+  }
+
+  function showBiometricScreen(){
+    const userPanel = document.getElementById('bio-user-panel');
+    const register = document.getElementById('bio-register-panel');
+    const login = document.getElementById('bio-login-panel');
+    const title = document.getElementById('auth-title');
+    const desc = document.getElementById('auth-desc');
+
+    if(!selectedUserId || !biometricUser()){
+      userPanel?.classList.remove('hidden');
+      register.classList.add('hidden');
+      login.classList.add('hidden');
+      title.textContent = 'Pilih User';
+      desc.textContent = 'Pilih user sebelum mendaftar atau masuk menggunakan keamanan biometrik.';
+      return;
+    }
+
+    userPanel?.classList.add('hidden');
+    if(!isWebAuthnAvailable() || !isWebAuthnSecureContext()){
+      title.textContent = 'Perangkat atau Koneksi Belum Mendukung';
+      desc.textContent = 'Pendaftaran biometrik membutuhkan browser yang mendukung Passkey/WebAuthn dan koneksi HTTPS yang aman.';
+      register.classList.add('hidden');
+      login.classList.add('hidden');
+      setBioStatus('Silakan gunakan browser modern seperti Chrome, Edge, Safari, atau browser yang mendukung Passkey.', true);
+      return;
+    }
+
+    const user = biometricUser();
+    const saved = getSavedCredential();
+    title.textContent = user.role + ' · ' + user.name;
+    if(saved?.credentialId){
+      desc.textContent = 'Akun ini sudah memiliki metode keamanan terdaftar. Verifikasi untuk melanjutkan.';
+      register.classList.add('hidden');
+      login.classList.remove('hidden');
+      setBioStatus('Metode keamanan untuk ' + user.name + ' sudah terdaftar di perangkat ini.');
+    }else{
+      desc.textContent = 'Akun ini belum terdaftar. Pilih Sidik Jari atau Wajah untuk mendaftar pertama kali.';
+      register.classList.remove('hidden');
+      login.classList.add('hidden');
+      setBioStatus('Daftarkan metode keamanan untuk ' + user.name + '.');
+    }
+  }
+
+  async function registerBiometric(){
+    if(!isWebAuthnAvailable()){
+      setBioStatus('Browser ini belum mendukung Passkey/WebAuthn. Buka link aplikasi langsung di Chrome atau browser terbaru, bukan dari browser dalam aplikasi lain.', true);
+      return;
+    }
+    if(!isWebAuthnSecureContext()){
+      setBioStatus('Pendaftaran sidik jari memerlukan koneksi HTTPS yang aman. Buka alamat Web App yang diawali https://.', true);
+      return;
+    }
+    if(!selectedUserId || !biometricUser()){
+      setBioStatus('Silakan pilih user terlebih dahulu.', true);
+      return;
+    }
+    if(!selectedBiometric){
+      setBioStatus('Silakan pilih Sidik Jari atau Wajah terlebih dahulu.', true);
+      return;
+    }
+
+    const btn = document.getElementById('btn-register-biometric');
+    btn.disabled = true;
+    btn.textContent = 'Menyiapkan pendaftaran...';
+
+    try{
+      const challenge = randomBytes(32);
+      const userId = new TextEncoder().encode(biometricUser().key);
+
+      // Identitas WebAuthn dibuat berbeda untuk setiap pilihan user.
+      const credential = await navigator.credentials.create({
+        publicKey: {
+          challenge,
+          rp: {
+            name: 'Sistem Internal'
+          },
+          user: {
+            id: userId,
+            name: biometricUser().key + '@sistem-internal',
+            displayName: biometricUser().role + ' - ' + biometricUser().name
+          },
+          pubKeyCredParams: [
+            { type: 'public-key', alg: -7 },
+            { type: 'public-key', alg: -257 }
+          ],
+          authenticatorSelection: {
+            // Jangan mengunci ke 'platform': beberapa HP/browser mengelola passkey
+            // dengan cara berbeda. userVerification tetap wajib agar perangkat meminta
+            // sidik jari, pengenalan wajah, PIN, atau kunci layar sesuai dukungannya.
+            userVerification: 'required',
+            residentKey: 'preferred',
+            requireResidentKey: false
+          },
+          timeout: 60000,
+          attestation: 'none'
+        }
+      });
+
+      if(!credential) throw new Error('Pendaftaran dibatalkan.');
+
+      const credentialId = base64UrlEncode(credential.rawId);
+
+      // Catatan: ini menyimpan identitas credential lokal, bukan data sidik jari/wajah.
+      // Untuk keamanan tingkat server/enterprise, credential harus diverifikasi di Code.gs/backend.
+      const registeredAt = new Date().toISOString();
+      localStorage.setItem(scopedStorageKey(PASSKEY_STORAGE_KEY), JSON.stringify({
+        credentialId,
+        createdAt: registeredAt,
+        method: selectedBiometric,
+        userId: selectedUserId,
+        userRole: biometricUser().role,
+        userName: biometricUser().name
+      }));
+      await recordSecurityEvent('register', selectedBiometric, credentialId);
+
+      setBioStatus('Pendaftaran ' + biometricUser().name + ' berhasil. Sekarang verifikasi biometrik untuk masuk.');
+      document.getElementById('bio-register-panel').classList.add('hidden');
+      document.getElementById('bio-login-panel').classList.remove('hidden');
+      document.getElementById('auth-title').textContent = 'Pendaftaran Berhasil';
+      document.getElementById('auth-desc').textContent = 'User: ' + biometricUser().name + '. Silakan verifikasi metode keamanan untuk masuk.';
+    }catch(err){
+      console.error('WebAuthn registration:', err);
+      let msg = 'Pendaftaran biometrik gagal.';
+      if(err?.name === 'NotAllowedError'){
+        msg = 'Pendaftaran dibatalkan atau ditolak perangkat. Pastikan sidik jari/wajah atau kunci layar sudah diatur di HP, lalu coba lagi dan selesaikan dialog keamanan sampai tuntas.';
+      }else if(err?.name === 'NotSupportedError'){
+        msg = 'HP atau browser ini tidak menyediakan autentikator yang cocok. Perbarui Chrome, aktifkan kunci layar, dan coba dari browser utama HP.';
+      }else if(err?.name === 'InvalidStateError'){
+        msg = 'Passkey untuk aplikasi ini mungkin sudah terdaftar di perangkat. Coba masuk dengan metode yang terdaftar atau hapus passkey aplikasi dari pengaturan passkey HP.';
+      }else if(err?.name === 'SecurityError'){
+        msg = 'Browser menolak pendaftaran karena konteks atau alamat situs tidak aman. Buka URL Web App HTTPS secara langsung di Chrome.';
+      }else if(err?.name === 'ConstraintError'){
+        msg = 'Perangkat tidak dapat memenuhi pengaturan autentikasi yang diminta. Pastikan kunci layar aktif dan coba browser terbaru.';
+      }else if(err?.name === 'NotReadableError'){
+        msg = 'Autentikator sedang tidak bisa digunakan. Buka kunci HP, tutup aplikasi lain yang memakai biometrik, lalu coba lagi.';
+      }else if(!isWebAuthnSecureContext()){
+        msg = 'WebAuthn memerlukan HTTPS. Pastikan Web App dibuka melalui alamat HTTPS.';
+      }else if(err?.message){
+        msg = 'Pendaftaran gagal (' + (err.name || 'Error') + '): ' + err.message;
+      }
+      setBioStatus(msg, true);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Daftar & Aktifkan';
+    }
+  }
+
+  async function loginWithBiometric(){
+    if(!selectedUserId || !biometricUser()){
+      setBioStatus('Silakan pilih user terlebih dahulu.', true);
+      backToUserSelection();
+      return;
+    }
+    const saved = getSavedCredential();
+    if(!saved?.credentialId){
+      showBiometricScreen();
+      return;
+    }
+
+    const btn = document.getElementById('btn-biometric-login');
+    btn.disabled = true;
+    btn.textContent = 'Memverifikasi...';
+
+    try{
+      const challenge = randomBytes(32);
+
+      const assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          allowCredentials: [{
+            type: 'public-key',
+            id: base64UrlDecode(saved.credentialId),
+            transports: ['internal']
+          }],
+          userVerification: 'required',
+          timeout: 60000
+        }
+      });
+
+      if(!assertion) throw new Error('Verifikasi dibatalkan.');
+
+      await recordSecurityEvent('login', saved.method, saved.credentialId);
+      setBioStatus('Verifikasi berhasil untuk ' + biometricUser().name + '. Membuka dashboard...');
+      goDashboard();
+    }catch(err){
+      console.error('WebAuthn authentication:', err);
+      let msg = 'Verifikasi biometrik gagal.';
+      if(err?.name === 'NotAllowedError') msg = 'Verifikasi dibatalkan atau biometrik tidak cocok.';
+      setBioStatus(msg, true);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Verifikasi & Masuk';
+    }
+  }
+
+  function resetBiometricRegistration(){
+    if(!selectedUserId || !biometricUser()){
+      backToUserSelection();
+      return;
+    }
+    if(!confirm('Hapus pendaftaran biometrik untuk ' + biometricUser().name + ' pada perangkat ini dan daftar ulang?')) return;
+    localStorage.removeItem(scopedStorageKey(PASSKEY_STORAGE_KEY));
+    localStorage.removeItem(scopedStorageKey(SECURITY_PROFILE_KEY));
+    localStorage.removeItem(scopedStorageKey(SECURITY_HISTORY_KEY));
+    // Hanya untuk kompatibilitas data lama milik Lola.
+    if(selectedUserId === 'lola'){
+      localStorage.removeItem(PASSKEY_STORAGE_KEY);
+      localStorage.removeItem(SECURITY_PROFILE_KEY);
+      localStorage.removeItem(SECURITY_HISTORY_KEY);
+    }
+    selectedBiometric = '';
+    document.getElementById('choice-fingerprint')?.classList.remove('selected');
+    document.getElementById('choice-face')?.classList.remove('selected');
+    const btn = document.getElementById('btn-register-biometric');
+    if(btn) btn.disabled = true;
+    showBiometricScreen();
+  }
+
+  // Saat halaman dibuka, tampilkan layar pendaftaran atau login biometrik.
+  window.addEventListener('DOMContentLoaded', () => {
+    selectedUserId = '';
+    showBiometricScreen();
+    renderSecurityPanel();
+  });
 
   function goDashboard(){
     document.getElementById('page-landing').classList.add('hidden');
@@ -562,6 +1949,8 @@
       }
     }
     requestAnimationFrame(tick);
+    if(typeof showOnlinePopupAfterLogin === 'function') showOnlinePopupAfterLogin();
+    setTimeout(()=>{ startOnlineMonitoring(); refreshOnlineUsers(); }, 500);
   }
 
   function logout(){
@@ -573,6 +1962,7 @@
   }
 
   function konfirmasiLogout(){
+    stopOnlineMonitoring();
     document.getElementById('modal-logout').classList.add('hidden');
     document.getElementById('page-dashboard').classList.add('hidden');
 
@@ -582,6 +1972,7 @@
     setTimeout(()=>{
       bye.classList.add('hidden');
       document.getElementById('page-landing').classList.remove('hidden');
+      showBiometricScreen();
       showToast('Anda telah keluar');
     }, 1600); // durasi tampilan layar pamit (ms)
   }
@@ -612,14 +2003,178 @@
   window.addEventListener('load', mintaIzinLokasi);
 
 
-  function switchTab(tab){
-    ['dashboard','input','rekap'].forEach(t=>{
+  function toggleSidebar(force){
+    const sidebar = document.getElementById('app-sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    if(!sidebar || !overlay) return;
+    const open = typeof force === 'boolean' ? force : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', open);
+    overlay.classList.toggle('show', open);
+  }
+
+  const TAB_META = {
+    dashboard: ['Dashboard', 'Ringkasan data tanggung renteng dan aktivitas terbaru.'],
+    input: ['Input Data', 'Tambahkan catatan tanggung renteng baru ke sistem.'],
+    rekap: ['Rekapan', 'Cari dan lihat rangkuman data yang tersimpan.'],
+    security: ['Verifikasi Keamanan', 'Pantau metode biometrik dan detail perangkat yang digunakan.']
+  };
+
+  const SECURITY_MENU_PASSWORD = '08maret';
+
+  function requestSecurityAccess(){
+    const modal = document.getElementById('security-password-modal');
+    const input = document.getElementById('security-password-input');
+    const err = document.getElementById('security-password-error');
+    if(!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if(err){
+      err.classList.add('hidden');
+      err.textContent = '';
+    }
+    if(input){
+      input.value = '';
+      setTimeout(() => input.focus(), 80);
+    }
+  }
+
+  function closeSecurityPasswordModal(){
+    const modal = document.getElementById('security-password-modal');
+    if(!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function verifySecurityPassword(){
+    const input = document.getElementById('security-password-input');
+    const err = document.getElementById('security-password-error');
+    const value = input ? input.value : '';
+
+    if(value !== SECURITY_MENU_PASSWORD){
+      if(err){
+        err.textContent = 'Password salah. Akses Verifikasi Keamanan ditolak.';
+        err.classList.remove('hidden');
+      }
+      if(input){
+        input.value = '';
+        input.focus();
+      }
+      return;
+    }
+
+    closeSecurityPasswordModal();
+    switchTab('security', true);
+  }
+
+  function getSecurityDeviceValue(){
+    const info = getStoredSecurityInfo();
+    return (info && info.device) ? String(info.device) : detectDeviceName();
+  }
+
+  function editSecurityDevice(){
+    const current = getSecurityDeviceValue();
+    const cell = document.getElementById('security-device-cell');
+    if(!cell) return;
+
+    cell.innerHTML = `
+      <div class="device-edit-wrap">
+        <input id="security-device-edit-input" class="device-edit-input" type="text"
+               value="${escapeHtmlAttr(current)}" maxlength="80" autocomplete="off">
+        <div class="device-edit-actions">
+          <button class="device-save-btn" onclick="saveSecurityDevice()">Simpan</button>
+          <button class="device-cancel-btn" onclick="renderSecurityPanel()">Batal</button>
+        </div>
+      </div>`;
+
+    const input = document.getElementById('security-device-edit-input');
+    if(input){
+      input.focus();
+      input.select();
+      input.addEventListener('keydown', e => {
+        if(e.key === 'Enter') saveSecurityDevice();
+        if(e.key === 'Escape') renderSecurityPanel();
+      });
+    }
+  }
+
+  function escapeHtmlAttr(value){
+    return String(value ?? '')
+      .replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+      .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function saveSecurityDevice(){
+    const input = document.getElementById('security-device-edit-input');
+    const value = input ? input.value.trim() : '';
+    if(!value){
+      if(input){ input.focus(); }
+      return;
+    }
+
+    try{
+      const info = getStoredSecurityInfo() || {};
+      // Hanya mengubah kolom device. Data keamanan lainnya tetap utuh.
+      info.device = value;
+      localStorage.setItem('tr_ciledug_security_info_v1', JSON.stringify(info));
+      updateOnlineDevice();
+      renderSecurityPanel();
+    }catch(e){
+      alert('Nama device tidak dapat disimpan pada perangkat ini.');
+    }
+  }
+
+  function getStoredSecurityInfo(){
+    try{
+      const raw = localStorage.getItem('tr_ciledug_security_info_v1');
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+
+  function detectDeviceName(){
+    const info = getStoredSecurityInfo();
+    if(info && info.device){
+      return info.device;
+    }
+
+    const ua = navigator.userAgent || '';
+    // Android: try to extract the model between "Android ...;" and "Build/"
+    let m = ua.match(/Android[^;]*;\s*(?:[a-z]{2}-[A-Z]{2};\s*)?(?:wv;\s*)?([^;)]+?)(?:\s+Build\/|;|\))/i);
+    if(m && m[1]){
+      const model = m[1].trim();
+      if(model && !/^Linux$/i.test(model)) return model;
+    }
+    // iPhone/iPad fallback.
+    if(/iPhone/i.test(ua)) return 'iPhone';
+    if(/iPad/i.test(ua)) return 'iPad';
+    if(/Macintosh/i.test(ua)) return 'Mac';
+    if(/Windows/i.test(ua)) return 'Windows PC';
+    return 'Perangkat Anda';
+  }
+
+  function updateOnlineDevice(){
+    const el = document.getElementById('online-device-name');
+    if(el) el.textContent = getSecurityDeviceValue() + ' sedang online';
+  }
+
+  function switchTab(tab, securityUnlocked=false){
+    if(tab === 'security' && !securityUnlocked){
+      requestSecurityAccess();
+      return;
+    }
+    ['dashboard','input','rekap','security'].forEach(t=>{
       document.getElementById('content-'+t).classList.toggle('hidden', t!==tab);
       document.getElementById('tab-'+t).classList.toggle('active', t===tab);
     });
+    const meta = TAB_META[tab] || TAB_META.dashboard;
+    const title = document.getElementById('page-title');
+    const subtitle = document.getElementById('page-subtitle');
+    if(title) title.textContent = meta[0];
+    if(subtitle) subtitle.textContent = meta[1];
+    toggleSidebar(false);
     if(tab==='dashboard') renderDashboard();
     if(tab==='rekap') renderRekap();
     if(tab==='input') setTimeout(initSignaturePad, 0);
+    if(tab==='security'){ renderSecurityPanel(); refreshOnlineUsers(); }
   }
 
   function fmtRupiah(n){
@@ -967,6 +2522,98 @@
     t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'), 2000);
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateOnlineDevice();
+    setInterval(updateOnlineDevice, 15000);
+  });
+
+
+  // ===== POPUP NOTIF STATUS ONLINE =====
+  let onlinePopupTimer = null;
+
+  function showOnlinePopup(){
+    const popup = document.getElementById('online-status-popup');
+    const title = document.getElementById('online-popup-title');
+    if(!popup || !title) return;
+
+    let device = 'Lola';
+    try {
+      if(typeof getSecurityDeviceValue === 'function'){
+        device = getSecurityDeviceValue() || 'Lola';
+      } else if(typeof getStoredSecurityInfo === 'function'){
+        const info = getStoredSecurityInfo();
+        device = (info && info.device) || 'Lola';
+      }
+    } catch(e) {}
+
+    title.textContent = device + ' Sedang Online';
+    popup.classList.add('show');
+
+    clearTimeout(onlinePopupTimer);
+    onlinePopupTimer = setTimeout(hideOnlinePopup, 3000);
+  }
+
+  function hideOnlinePopup(){
+    const popup = document.getElementById('online-status-popup');
+    if(!popup) return;
+    popup.classList.remove('show');
+    clearTimeout(onlinePopupTimer);
+    onlinePopupTimer = null;
+  }
+  // Popup dapat ditutup dengan tombol X atau swipe ke kanan/kiri.
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('online-status-popup');
+    if(!popup) return;
+    let touchStartX = 0, touchStartY = 0;
+    popup.addEventListener('touchstart', e => {
+      const t = e.changedTouches && e.changedTouches[0];
+      if(t){ touchStartX = t.clientX; touchStartY = t.clientY; }
+    }, {passive:true});
+    popup.addEventListener('touchend', e => {
+      const t = e.changedTouches && e.changedTouches[0];
+      if(!t) return;
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) hideOnlinePopup();
+    }, {passive:true});
+    let mouseStartX = null;
+    popup.addEventListener('mousedown', e => { mouseStartX = e.clientX; });
+    popup.addEventListener('mouseup', e => {
+      if(mouseStartX !== null && Math.abs(e.clientX - mouseStartX) > 70) hideOnlinePopup();
+      mouseStartX = null;
+    });
+  });
+
+  // Tampilkan setelah dashboard siap, bukan di halaman login.
+  function showOnlinePopupAfterLogin(){
+    setTimeout(showOnlinePopup, 600);
+  }
+
 </script>
+
+<style id="fix-light-theme-page-heading-contrast">
+  /* Pastikan judul halaman tetap terbaca pada latar putih, termasuk saat tab diganti. */
+  #page-dashboard #page-title,
+  #page-dashboard .page-title,
+  #page-dashboard .page-heading h1,
+  #page-dashboard .page-heading h2,
+  #page-dashboard [id^="page-title"],
+  #page-dashboard h1,
+  #page-dashboard h2 {
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+  }
+  /* Label halaman dan deskripsi tetap gelap/kontras di tema putih. */
+  #page-dashboard .page-heading,
+  #page-dashboard .page-heading p,
+  #page-dashboard .page-heading .subtitle {
+    color: #334155 !important;
+    -webkit-text-fill-color: #334155 !important;
+  }
+</style>
+
 </body>
 </html>
