@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Database Pribadi Lola Dwi Setiawan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root{
@@ -382,6 +385,99 @@
   @keyframes welcomePop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
   @keyframes nailongHello{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-5px) rotate(2deg)}}
 
+
+  /* ===== Dashboard v2 ===== */
+  #page-dashboard{ font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif; background:#f1f5fa!important; }
+  #page-dashboard input,#page-dashboard select,#page-dashboard textarea,#page-dashboard button{ font-family:inherit; }
+  #content-dashboard{ max-width:1080px; margin:0 auto; }
+  .dx-hero{
+    position:relative; overflow:hidden; border-radius:26px; padding:22px 20px 20px;
+    background:#0b2347; color:#fff; margin-bottom:14px;
+  }
+  .dx-hero::before,.dx-hero::after{
+    content:""; position:absolute; border-radius:50%; pointer-events:none;
+    border:1px solid rgba(255,255,255,.09);
+  }
+  .dx-hero::before{ width:340px; height:340px; right:-110px; top:-150px; }
+  .dx-hero::after{ width:200px; height:200px; right:-40px; top:-90px; border-color:rgba(245,179,1,.28); }
+  .dx-hero > *{ position:relative; z-index:1; }
+  .dx-hero-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:26px; }
+  .dx-greet{ font-size:18px; font-weight:700; letter-spacing:-.01em; color:#fff; }
+  .dx-date{ font-size:12px; font-weight:500; color:rgba(255,255,255,.72); margin-top:3px; }
+  .dx-add{
+    display:inline-flex; align-items:center; gap:6px; flex-shrink:0;
+    padding:9px 14px; border-radius:12px; border:0; cursor:pointer;
+    background:#f5b301; color:#0b2347; font-size:12.5px; font-weight:700;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .dx-add:hover{ background:#ffc42e; }
+  .dx-add:active{ transform:scale(.97); }
+  .dx-hero-label{ font-size:12.5px; font-weight:500; color:rgba(255,255,255,.78); }
+  .dx-hero-num{
+    font-size:clamp(30px,8.5vw,46px); font-weight:800; letter-spacing:-.03em; line-height:1.1;
+    margin:4px 0 20px; font-variant-numeric:tabular-nums; color:#fff; word-break:break-word;
+  }
+  .dx-chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .dx-chip{
+    display:flex; align-items:baseline; gap:8px; padding:9px 14px; border-radius:12px;
+    background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.14);
+  }
+  .dx-chip-n{ font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; color:#fff; }
+  .dx-chip-l{ font-size:12px; font-weight:500; color:rgba(255,255,255,.8); }
+
+  .dx-grid{ display:grid; gap:14px; margin-bottom:14px; }
+  @media (min-width:900px){ .dx-grid{ grid-template-columns:7fr 5fr; } .dx-hero{ padding:28px 30px 26px; } }
+  .dx-card{
+    background:#fff; border:1px solid rgba(23,59,112,.12); border-radius:18px; padding:18px;
+    min-width:0;
+  }
+  .dx-card h3{ font-size:14.5px; font-weight:700; color:#0b2347; letter-spacing:-.005em; }
+  .dx-sub{ font-size:12px; color:#64748b; margin-top:2px; font-weight:500; }
+
+  .dx-bars{ display:flex; align-items:flex-end; gap:10px; height:170px; margin-top:18px; }
+  .dx-bar-col{ flex:1; min-width:0; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; }
+  .dx-bar-val{ font-size:12px; font-weight:700; color:#0b2347; font-variant-numeric:tabular-nums; }
+  .dx-bar-track{ width:100%; flex:1; display:flex; align-items:flex-end; }
+  .dx-bar{
+    width:100%; border-radius:10px 10px 4px 4px; background:#c7d5e8; min-height:4px;
+    transform-origin:bottom; animation:dxGrow .7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .dx-bar.now{ background:#173b70; }
+  .dx-bar.zero{ background:#e2e8f0; }
+  .dx-bar-lbl{ font-size:11.5px; font-weight:600; color:#64748b; }
+  .dx-bar-col.now .dx-bar-lbl{ color:#0b2347; }
+  @keyframes dxGrow{ from{ transform:scaleY(0); } to{ transform:scaleY(1); } }
+
+  .dx-rank{ margin-top:16px; display:flex; flex-direction:column; gap:14px; }
+  .dx-rank-head{ display:flex; justify-content:space-between; gap:10px; font-size:13px; font-weight:600; color:#1e293b; margin-bottom:6px; }
+  .dx-rank-head span:last-child{ color:#64748b; font-variant-numeric:tabular-nums; flex-shrink:0; }
+  .dx-rank-head span:first-child{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dx-rank-track{ height:8px; border-radius:99px; background:#e8eef6; overflow:hidden; }
+  .dx-rank-fill{ height:100%; border-radius:99px; background:#173b70; transform-origin:left; animation:dxGrowX .7s cubic-bezier(.2,.8,.2,1) both; }
+  .dx-rank-item:first-child .dx-rank-fill{ background:#f5b301; }
+  @keyframes dxGrowX{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+
+  .dx-list{ margin-top:8px; }
+  .dx-row{ display:flex; align-items:center; gap:12px; padding:12px 0; border-top:1px solid #edf1f7; }
+  .dx-row:first-child{ border-top:0; }
+  .dx-av{
+    width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:#eaf0f8; color:#173b70; font-size:12.5px; font-weight:800;
+  }
+  .dx-row-main{ flex:1; min-width:0; }
+  .dx-row-name{ font-size:13.5px; font-weight:700; color:#0f172a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dx-row-sub{ font-size:12px; color:#64748b; margin-top:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dx-row-side{ text-align:right; flex-shrink:0; }
+  .dx-row-amt{ font-size:13px; font-weight:700; color:#0b2347; font-variant-numeric:tabular-nums; }
+  .dx-row-date{ font-size:11.5px; color:#64748b; margin-top:1px; }
+  .dx-empty{ padding:22px 8px 8px; text-align:center; font-size:13px; color:#475569; }
+  .dx-empty button{
+    margin-top:12px; padding:9px 16px; border-radius:12px; border:0; cursor:pointer;
+    background:#173b70; color:#fff; font-size:12.5px; font-weight:700;
+  }
+  .dx-add:focus-visible,.dx-empty button:focus-visible{ outline:3px solid #7897bd; outline-offset:2px; }
+  @media (prefers-reduced-motion:reduce){ .dx-bar,.dx-rank-fill{ animation:none; } }
+
 </style>
 </head>
 <body>
@@ -417,7 +513,7 @@
         DATABASE PRIBADI<br>LOLA DWI SETIAWAN<br>JANGAN KEPO
       </h1>
       <p class="text-slate-400 text-sm mb-8 leading-relaxed">
-        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.2 | Di Update : 19 Oktober 2026
+        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.3 | Di Update : 19 Oktober 2026
       </p>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
@@ -587,28 +683,38 @@
 
     <!-- ===== TAB: DASHBOARD ===== -->
     <div id="content-dashboard" class="fade-in">
-      <div class="grid grid-cols-2 gap-3 mb-4">
-        <div class="card-glass rounded-2xl p-4">
-          <div class="text-[11px] text-slate-400 mb-1">Total Catatan Tanggung Renteng</div>
-          <div id="stat-total" class="text-2xl font-extrabold grad-text">0</div>
+      <section class="dx-hero" aria-label="Ringkasan tanggung renteng">
+        <div class="dx-hero-top">
+          <div>
+            <div class="dx-greet" id="dx-greet">Halo, Lola</div>
+            <div class="dx-date" id="dx-date"></div>
+          </div>
         </div>
-        <div class="card-glass rounded-2xl p-4">
-          <div class="text-[11px] text-slate-400 mb-1">Bulan Ini</div>
-          <div id="stat-bulan" class="text-2xl font-extrabold grad-text">0</div>
+        <div class="dx-hero-label">Total nominal tanggung renteng</div>
+        <div id="stat-nominal" class="dx-hero-num">Rp 0</div>
+        <div class="dx-chips">
+          <div class="dx-chip"><span id="stat-total" class="dx-chip-n">0</span><span class="dx-chip-l">catatan seluruhnya</span></div>
+          <div class="dx-chip"><span id="stat-bulan" class="dx-chip-n">0</span><span class="dx-chip-l">catatan bulan ini</span></div>
         </div>
-        <div class="card-glass rounded-2xl p-4 col-span-2">
-          <div class="text-[11px] text-slate-400 mb-1">Total Nominal Tanggung Renteng</div>
-          <div id="stat-nominal" class="text-xl font-extrabold grad-text">Rp 0</div>
-        </div>
-        <div class="card-glass rounded-2xl p-4 col-span-2">
-          <div class="text-[11px] text-slate-400 mb-2">Center dengan Tanggung Renteng Terbanyak</div>
-          <div id="stat-center" class="text-sm font-semibold text-slate-200">Belum ada data</div>
-        </div>
+      </section>
+
+      <div class="dx-grid">
+        <section class="dx-card">
+          <h3>Catatan per bulan</h3>
+          <p class="dx-sub">6 bulan terakhir</p>
+          <div id="dx-bars" class="dx-bars" aria-label="Grafik jumlah catatan per bulan"></div>
+        </section>
+        <section class="dx-card">
+          <h3>Center terbanyak</h3>
+          <p id="stat-center" class="dx-sub">Belum ada data</p>
+          <div id="dx-rank" class="dx-rank"></div>
+        </section>
       </div>
-      <div class="card-glass rounded-2xl p-4">
-        <div class="text-[12px] font-semibold text-slate-300 mb-3">Aktivitas Terbaru</div>
-        <div id="recent-list" class="space-y-2 text-[12px] text-slate-400">Belum ada data.</div>
-      </div>
+
+      <section class="dx-card">
+        <h3>Aktivitas terbaru</h3>
+        <div id="recent-list" class="dx-list">Belum ada data.</div>
+      </section>
     </div>
 
     <!-- ===== TAB: INPUT DATA TANGGUNG RENTENG ===== -->
@@ -619,7 +725,13 @@
 
           <div>
             <label class="text-[11px] text-slate-400 block mb-1">Tanggal Tanggung Renteng</label>
-            <input required type="date" id="f-tanggal" class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-700 bg-slate-100">
+            <div class="relative">
+              <input required type="text" id="f-tanggal" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="dd-mm-yyyy" class="w-full rounded-lg px-3 py-2.5 pr-11 text-[13px] border border-slate-700 bg-slate-100">
+              <button type="button" id="btn-pilih-tanggal" aria-label="Pilih tanggal dari kalender" class="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-500">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              </button>
+              <input type="date" id="f-tanggal-picker" tabindex="-1" aria-hidden="true" style="position:absolute;right:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none">
+            </div>
           </div>
           <div>
             <label class="text-[11px] text-slate-400 block mb-1">Cabang</label>
@@ -998,6 +1110,14 @@
     if(popup) popup.classList.add('hidden');
   }
 
+  function resetTombolMulaiAkses(){
+    const b=document.getElementById('btn-mulai-akses');
+    if(b){ b.disabled=false; b.style.opacity=''; b.removeAttribute('aria-busy'); }
+    const l=document.getElementById('mulai-akses-label'); if(l) l.textContent='Mulai Akses';
+    const a=document.getElementById('mulai-akses-arrow'); if(a) a.classList.remove('hidden');
+    const sp=document.getElementById('mulai-akses-spinner'); if(sp) sp.classList.add('hidden');
+  }
+
   async function goDashboard(){
     const startButton = document.getElementById('btn-mulai-akses');
     const startLabel = document.getElementById('mulai-akses-label');
@@ -1086,6 +1206,7 @@
     setTimeout(()=>{
       bye.classList.add('hidden');
       document.getElementById('page-landing').classList.remove('hidden');
+      resetTombolMulaiAkses();
       terapkanGambarLogin();
       showToast('Anda telah keluar');
     }, 1600); // durasi tampilan layar pamit (ms)
@@ -1488,6 +1609,7 @@
         hentikanHeartbeatDeviceAkses();
         document.getElementById('page-dashboard').classList.add('hidden');
         document.getElementById('page-landing').classList.remove('hidden');
+        resetTombolMulaiAkses();
       }
     }catch(e){console.warn('Heartbeat Device Akses:',e);}
   }
@@ -1838,9 +1960,57 @@
     return signCanvas.toDataURL('image/png');
   }
 
+  // ===== Format tanggal dd-mm-yyyy =====
+  function fmtTglDMY(v){
+    if(!v) return '-';
+    const str = String(v).trim();
+    if(/^\d{4}-\d{2}-\d{2}$/.test(str)){ const [y,m,d] = str.split('-'); return d+'-'+m+'-'+y; }
+    const t = new Date(str);
+    if(isNaN(t)) return str;
+    const p2 = n => String(n).padStart(2,'0');
+    return p2(t.getDate())+'-'+p2(t.getMonth()+1)+'-'+t.getFullYear();
+  }
+  function tglInputKeISO(str){
+    const m = String(str||'').trim().match(/^(\d{2})-(\d{2})-(\d{4})$/);
+    if(!m) return '';
+    const d = +m[1], mo = +m[2], y = +m[3];
+    const t = new Date(y, mo-1, d);
+    if(t.getFullYear()!==y || t.getMonth()!==mo-1 || t.getDate()!==d) return '';
+    return m[3]+'-'+m[2]+'-'+m[1];
+  }
+  (function pasangInputTanggal(){
+    const inp = document.getElementById('f-tanggal');
+    const pick = document.getElementById('f-tanggal-picker');
+    const btn = document.getElementById('btn-pilih-tanggal');
+    if(!inp) return;
+    inp.addEventListener('input', ()=>{
+      const dg = inp.value.replace(/\D/g,'').slice(0,8);
+      let out = dg;
+      if(dg.length>4) out = dg.slice(0,2)+'-'+dg.slice(2,4)+'-'+dg.slice(4);
+      else if(dg.length>2) out = dg.slice(0,2)+'-'+dg.slice(2);
+      inp.value = out;
+    });
+    if(btn && pick){
+      btn.addEventListener('click', ()=>{
+        const iso = tglInputKeISO(inp.value);
+        if(iso) pick.value = iso;
+        if(typeof pick.showPicker==='function'){ try{ pick.showPicker(); return; }catch(e){} }
+        pick.focus(); pick.click();
+      });
+      pick.addEventListener('change', ()=>{ if(pick.value) inp.value = fmtTglDMY(pick.value); });
+    }
+  })();
+
   async function simpanData(e){
     e.preventDefault();
     if(!cekUrlGas()) return false;
+
+    const tanggalISO = tglInputKeISO(document.getElementById('f-tanggal').value);
+    if(!tanggalISO){
+      showToast('Tanggal harus berformat dd-mm-yyyy, contoh 20-08-2026');
+      document.getElementById('f-tanggal').focus();
+      return false;
+    }
 
     const submitBtn = document.querySelector('#form-tr button[type="submit"]');
     const originalText = submitBtn.textContent;
@@ -1848,7 +2018,7 @@
     submitBtn.textContent = 'Menyimpan...';
 
     const item = {
-      tanggal: document.getElementById('f-tanggal').value,
+      tanggal: tanggalISO,
       staf: document.getElementById('f-staf').value.trim(),
       center: document.getElementById('f-center').value.trim(),
       idAnggota: document.getElementById('f-id-anggota').value.trim(),
@@ -1913,14 +2083,29 @@
     }
   }
 
+  function dxTgl(v){ return fmtTglDMY(v); }
+  function dxInisial(nama){
+    const w = String(nama || '?').trim().split(/\s+/).filter(Boolean);
+    return ((w[0]||'?')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  function dxSapaan(){
+    const h = new Date().getHours();
+    const w = h < 11 ? 'pagi' : h < 15 ? 'siang' : h < 18 ? 'sore' : 'malam';
+    return 'Selamat ' + w + ', Lola';
+  }
+
   async function renderDashboard(){
     const el = document.getElementById('recent-list');
-    el.innerHTML = 'Memuat data...';
+    el.innerHTML = '<div class="dx-empty">Memuat data...</div>';
+
+    const now = new Date();
+    document.getElementById('dx-greet').textContent = dxSapaan();
+    document.getElementById('dx-date').textContent = now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
     const data = await ambilDataServer();
 
     document.getElementById('stat-total').textContent = data.length;
 
-    const now = new Date();
     const bulanIni = data.filter(d=>{
       const t = new Date(d.tanggal);
       return t.getMonth()===now.getMonth() && t.getFullYear()===now.getFullYear();
@@ -1930,18 +2115,59 @@
     const totalNominal = data.reduce((a,b)=>a+(Number(b.nominal)||0),0);
     document.getElementById('stat-nominal').textContent = fmtRupiah(totalNominal);
 
+    // Grafik 6 bulan terakhir
+    const perBulan = {};
+    data.forEach(d=>{
+      const t = new Date(d.tanggal);
+      if(isNaN(t)) return;
+      const k = t.getFullYear()*12 + t.getMonth();
+      perBulan[k] = (perBulan[k]||0) + 1;
+    });
+    const bulan = [];
+    for(let i=5;i>=0;i--){
+      const t = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      bulan.push({ n: perBulan[t.getFullYear()*12+t.getMonth()] || 0, lbl: t.toLocaleDateString('id-ID',{month:'short'}), now: i===0 });
+    }
+    const maxB = Math.max(1, ...bulan.map(b=>b.n));
+    document.getElementById('dx-bars').innerHTML = bulan.map((b,i)=>`
+      <div class="dx-bar-col${b.now?' now':''}">
+        <div class="dx-bar-val">${b.n}</div>
+        <div class="dx-bar-track"><div class="dx-bar${b.now?' now':''}${b.n===0?' zero':''}" style="height:${b.n===0?4:Math.max(8,Math.round(b.n/maxB*100))}%;animation-delay:${i*60}ms"></div></div>
+        <div class="dx-bar-lbl">${escHtml(b.lbl)}</div>
+      </div>`).join('');
+
+    // Peringkat center
     const centerCount = {};
     data.forEach(d=>{ if(d.center) centerCount[d.center] = (centerCount[d.center]||0)+1; });
-    const topCenter = Object.entries(centerCount).sort((a,b)=>b[1]-a[1])[0];
-    document.getElementById('stat-center').textContent = topCenter ? `${topCenter[0]} (${topCenter[1]} Tanggung Renteng)` : 'Belum ada data';
+    const urut = Object.entries(centerCount).sort((a,b)=>b[1]-a[1]);
+    const topCenter = urut[0];
+    document.getElementById('stat-center').textContent = topCenter ? `${topCenter[0]} paling banyak, ${topCenter[1]} catatan` : 'Belum ada data';
+    const rankEl = document.getElementById('dx-rank');
+    if(!topCenter){
+      rankEl.innerHTML = '<div class="dx-empty">Peringkat center muncul setelah ada data.</div>';
+    } else {
+      rankEl.innerHTML = urut.slice(0,5).map(([nama,n],i)=>`
+        <div class="dx-rank-item">
+          <div class="dx-rank-head"><span>${escHtml(String(nama))}</span><span>${n} catatan</span></div>
+          <div class="dx-rank-track"><div class="dx-rank-fill" style="width:${Math.round(n/topCenter[1]*100)}%;animation-delay:${i*70}ms"></div></div>
+        </div>`).join('');
+    }
 
+    // Aktivitas terbaru
     if(data.length===0){
-      el.innerHTML = 'Belum ada data.';
+      el.innerHTML = '<div class="dx-empty">Belum ada catatan tanggung renteng.<br><button type="button" onclick="switchTab(\'input\')">Tambah catatan pertama</button></div>';
     } else {
       el.innerHTML = data.slice(0,5).map(d=>`
-        <div class="flex justify-between border-b border-slate-800 pb-2">
-          <span class="text-slate-200">${d.anggota || '-'}</span>
-          <span class="text-slate-500">${d.tanggal || '-'}</span>
+        <div class="dx-row">
+          <div class="dx-av">${escHtml(dxInisial(d.anggota))}</div>
+          <div class="dx-row-main">
+            <div class="dx-row-name">${escHtml(String(d.anggota || '-'))}</div>
+            <div class="dx-row-sub">Center ${escHtml(String(d.center || '-'))}</div>
+          </div>
+          <div class="dx-row-side">
+            <div class="dx-row-amt">${fmtRupiah(d.nominal)}</div>
+            <div class="dx-row-date">${escHtml(dxTgl(d.tanggal))}</div>
+          </div>
         </div>`).join('');
     }
   }
@@ -1953,7 +2179,7 @@
     const all = await ambilDataServer();
     const q = (document.getElementById('search-rekap')?.value || '').toLowerCase().trim();
     const data = all.filter(d =>
-      [d.anggota,d.center,d.staf,d.idAnggota,d.penanggung,d.alasan,d.keterangan,d.tanggal]
+      [d.anggota,d.center,d.staf,d.idAnggota,d.penanggung,d.alasan,d.keterangan,d.tanggal,fmtTglDMY(d.tanggal)]
         .some(v => String(v||'').toLowerCase().includes(q))
     );
     rekapCache = data;
@@ -1966,12 +2192,12 @@
         <div class="flex justify-between items-start mb-3 gap-2">
           <div>
             <div class="font-semibold text-slate-900 text-sm">${escHtml(String(d.anggota || '-'))}</div>
-            <div class="text-[11px] text-slate-500">${escHtml(String(d.center || '-'))} &middot; ${escHtml(String(d.tanggal || '-'))}</div>
+            <div class="text-[11px] text-slate-500">${escHtml(String(d.center || '-'))} &middot; ${escHtml(fmtTglDMY(d.tanggal))}</div>
           </div>
           <button onclick="hapusData(${Number(d.id)||0})" class="text-red-600 text-[11px] font-medium">Hapus</button>
         </div>
         <div class="grid grid-cols-2 gap-x-3 gap-y-2 text-[12px]">
-          <div class="text-slate-500">Tanggal</div><div class="text-slate-900 text-right break-words">${escHtml(String(d.tanggal||'-'))}</div>
+          <div class="text-slate-500">Tanggal</div><div class="text-slate-900 text-right break-words">${escHtml(fmtTglDMY(d.tanggal))}</div>
           <div class="text-slate-500">Nama Cabang</div><div class="text-slate-900 text-right break-words">${escHtml(String(d.staf||'-'))}</div>
           <div class="text-slate-500">Kode Center</div><div class="text-slate-900 text-right break-words">${escHtml(String(d.center||'-'))}</div>
           <div class="text-slate-500">Nomor ID Anggota</div><div class="text-slate-900 text-right break-words">${escHtml(String(d.idAnggota||'-'))}</div>
@@ -2031,7 +2257,7 @@
       urls=d.attachments.map(a=>typeof a==='string'?a:(a.url||a.link||a.dataUrl||'')).filter(Boolean);
     }
     if(!urls.length && d.linkBukti) urls=String(d.linkBukti).split(/,\s*/).filter(Boolean);
-    if(!urls.length){showToast('Belum ada bukti pendukung yang tersimpan untuk data ini.');return}
+    if(!urls.length){showToast('Yah Kamu nya enggak upload bukti neng, jadi kosong deh.');return}
     const isi=urls.map((url,n)=>buatItemLampiran(url,'Bukti Pendukung '+(n+1))).filter(Boolean).join('');
     bukaModalLampiran('Bukti Pendukung',isi||'<p class="text-slate-500 text-sm">Link bukti tidak valid. Periksa kolom Link Bukti Pendukung di server.</p>');
   }
