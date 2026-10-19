@@ -478,6 +478,62 @@
   .dx-add:focus-visible,.dx-empty button:focus-visible{ outline:3px solid #7897bd; outline-offset:2px; }
   @media (prefers-reduced-motion:reduce){ .dx-bar,.dx-rank-fill{ animation:none; } }
 
+
+  /* Animasi banyak kupu-kupu yang beterbangan pada layar persiapan dashboard */
+  #page-loading{overflow:hidden; isolation:isolate;}
+  .butterfly-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .butterfly{
+    position:absolute;left:-12%;top:var(--top,50%);
+    font-size:var(--size,26px);opacity:0;
+    filter:drop-shadow(0 3px 5px rgba(23,59,112,.16));
+    animation:butterflyFly var(--duration,9s) linear var(--delay,0s) infinite;
+    will-change:transform,opacity;
+  }
+  .butterfly:nth-child(1){--top:12%;--size:25px;--duration:10s;--delay:-2s}
+  .butterfly:nth-child(2){--top:24%;--size:34px;--duration:12s;--delay:-8s}
+  .butterfly:nth-child(3){--top:38%;--size:21px;--duration:8s;--delay:-4s}
+  .butterfly:nth-child(4){--top:53%;--size:30px;--duration:11s;--delay:-7s}
+  .butterfly:nth-child(5){--top:68%;--size:24px;--duration:9s;--delay:-1s}
+  .butterfly:nth-child(6){--top:79%;--size:32px;--duration:13s;--delay:-10s}
+  .butterfly:nth-child(7){--top:89%;--size:20px;--duration:10s;--delay:-5s}
+  .butterfly:nth-child(8){--top:17%;--size:19px;--duration:14s;--delay:-11s}
+  .butterfly:nth-child(9){--top:62%;--size:27px;--duration:12s;--delay:-3s}
+  .butterfly:nth-child(10){--top:43%;--size:23px;--duration:9s;--delay:-6s}
+  @keyframes butterflyFly{
+    0%{transform:translate3d(-5vw,25px,0) rotate(-18deg) scale(.75);opacity:0}
+    8%{opacity:.88}
+    25%{transform:translate3d(30vw,-35px,0) rotate(15deg) scale(1)}
+    50%{transform:translate3d(58vw,28px,0) rotate(-12deg) scale(.9);opacity:.95}
+    75%{transform:translate3d(85vw,-30px,0) rotate(18deg) scale(1.05)}
+    94%{opacity:.8}
+    100%{transform:translate3d(115vw,20px,0) rotate(-15deg) scale(.8);opacity:0}
+  }
+  .butterfly-center{position:relative;z-index:1;width:150px;height:150px;display:flex;align-items:center;justify-content:center;}
+  .butterfly-center .main-butterfly{font-size:78px;filter:drop-shadow(0 8px 14px rgba(23,59,112,.18));animation:butterflyHover 2s ease-in-out infinite;}
+  @keyframes butterflyHover{0%,100%{transform:translateY(3px) rotate(-7deg)}50%{transform:translateY(-10px) rotate(8deg)}}
+  #page-loading > .flex{position:relative;z-index:1}
+  @media(prefers-reduced-motion:reduce){.butterfly,.butterfly-center .main-butterfly{animation:none;opacity:.8}}
+
+
+  .dx-greet-row{display:flex;align-items:center;gap:9px}
+  .dx-greet-icon{display:inline-flex;align-items:center;justify-content:center;font-size:25px;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 5px rgba(245,179,1,.2))}
+  .prayer-card{background:#fff;border:1px solid rgba(23,59,112,.13);border-radius:18px;padding:17px 18px;margin:0 0 14px;box-shadow:0 8px 24px -18px rgba(11,35,71,.22)}
+  .prayer-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .prayer-title{font-size:15px;font-weight:800;color:#0b2347}
+  .prayer-location{font-size:11px;color:#64748b;margin-top:3px}
+  .prayer-next{margin-top:14px;padding:13px 14px;border-radius:14px;background:#eef4fb;border:1px solid #d9e5f4}
+  .prayer-next-label{font-size:11px;color:#475569;font-weight:600}
+  .prayer-next-name{font-size:17px;font-weight:800;color:#0b2347;margin-top:3px}
+  .prayer-countdown{font-size:22px;font-weight:800;color:#173b70;margin-top:2px;font-variant-numeric:tabular-nums}
+  .prayer-times{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:12px}
+  .prayer-time{padding:9px 3px;text-align:center;border:1px solid #e2e8f0;border-radius:11px;background:#fff;min-width:0}
+  .prayer-time.active{background:#173b70;border-color:#173b70}
+  .prayer-time-name{font-size:10px;color:#64748b;font-weight:600}
+  .prayer-time-value{font-size:12px;color:#0f172a;font-weight:800;margin-top:4px}
+  .prayer-time.active .prayer-time-name,.prayer-time.active .prayer-time-value{color:#fff}
+  .prayer-note{font-size:10px;color:#64748b;line-height:1.45;margin-top:10px}
+  @media(max-width:380px){.prayer-times{gap:4px}.prayer-time{padding:8px 1px}.prayer-time-name{font-size:9px}.prayer-time-value{font-size:11px}}
+
 </style>
 </head>
 <body>
@@ -513,7 +569,7 @@
         DATABASE PRIBADI<br>LOLA DWI SETIAWAN<br>JANGAN KEPO
       </h1>
       <p class="text-slate-400 text-sm mb-8 leading-relaxed">
-        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.3 | Di Update : 19 Oktober 2026
+        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.4 | Di Update : 20 Oktober 2026
       </p>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
@@ -534,61 +590,16 @@
 <section id="page-loading" class="hidden fixed inset-0 z-50 flex items-center justify-center px-6">
   <div class="flex flex-col items-center w-full max-w-xs">
 
-    <svg class="mascot-bounce" width="150" height="150" viewBox="0 0 140 150">
-      <defs>
-        <linearGradient id="petalg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ffcf4d"/>
-          <stop offset="1" stop-color="#f5940a"/>
-        </linearGradient>
-        <linearGradient id="faceg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ffe27a"/>
-          <stop offset="1" stop-color="#ffc633"/>
-        </linearGradient>
-      </defs>
-
-      <!-- bayangan -->
-      <ellipse class="mascot-shadow" cx="70" cy="144" rx="30" ry="6" fill="#000"/>
-
-      <!-- lengan -->
-      <ellipse class="mascot-arm-l" cx="40" cy="112" rx="9" ry="15" fill="url(#faceg)"/>
-      <ellipse class="mascot-arm-r" cx="100" cy="112" rx="9" ry="15" fill="url(#faceg)"/>
-
-      <!-- badan -->
-      <ellipse cx="70" cy="118" rx="30" ry="26" fill="url(#faceg)"/>
-      <ellipse cx="70" cy="122" rx="18" ry="20" fill="#fff8e6"/>
-      <!-- kaki -->
-      <ellipse cx="56" cy="146" rx="9" ry="6" fill="#f5940a"/>
-      <ellipse cx="84" cy="146" rx="9" ry="6" fill="#f5940a"/>
-
-      <!-- kelopak -->
-      <g class="petal-sway">
-        <g fill="url(#petalg)">
-          <ellipse cx="70" cy="20" rx="15" ry="22"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(45 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(90 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(135 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(180 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(225 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(270 70 62)"/>
-          <ellipse cx="70" cy="20" rx="15" ry="22" transform="rotate(315 70 62)"/>
-        </g>
-      </g>
-
-      <!-- muka -->
-      <circle cx="70" cy="62" r="30" fill="url(#faceg)"/>
-      <!-- pipi -->
-      <ellipse cx="47" cy="70" rx="7" ry="4.5" fill="#ff9f7a" opacity=".7"/>
-      <ellipse cx="93" cy="70" rx="7" ry="4.5" fill="#ff9f7a" opacity=".7"/>
-      <!-- mata -->
-      <g class="mascot-eye">
-        <ellipse cx="58" cy="58" rx="4.5" ry="6" fill="#1a1a1a"/>
-        <ellipse cx="82" cy="58" rx="4.5" ry="6" fill="#1a1a1a"/>
-        <circle cx="59.5" cy="55.5" r="1.4" fill="#fff"/>
-        <circle cx="83.5" cy="55.5" r="1.4" fill="#fff"/>
-      </g>
-      <!-- mulut -->
-      <path d="M63 73 Q70 79 77 73" stroke="#c2410c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    </svg>
+    <div class="butterfly-field" aria-hidden="true">
+      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+    </div>
+    <div class="butterfly-center" aria-hidden="true">
+      <span class="main-butterfly">🦋</span>
+    </div>
 
     <div class="text-white font-semibold text-[15px] mt-4 mb-1">
       Menyiapkan Dashboard<span class="loading-dot">.</span><span class="loading-dot">.</span><span class="loading-dot">.</span>
@@ -686,7 +697,7 @@
       <section class="dx-hero" aria-label="Ringkasan tanggung renteng">
         <div class="dx-hero-top">
           <div>
-            <div class="dx-greet" id="dx-greet">Halo, Lola</div>
+            <div class="dx-greet dx-greet-row"><span id="dx-greet-icon" class="dx-greet-icon" aria-hidden="true">☀️</span><span id="dx-greet">Halo, Lola</span></div>
             <div class="dx-date" id="dx-date"></div>
           </div>
         </div>
@@ -696,6 +707,29 @@
           <div class="dx-chip"><span id="stat-total" class="dx-chip-n">0</span><span class="dx-chip-l">catatan seluruhnya</span></div>
           <div class="dx-chip"><span id="stat-bulan" class="dx-chip-n">0</span><span class="dx-chip-l">catatan bulan ini</span></div>
         </div>
+      </section>
+
+      <section class="prayer-card" aria-label="Pengingat waktu sholat">
+        <div class="prayer-head">
+          <div>
+            <div class="prayer-title">🕌 Pengingat Waktu Sholat</div>
+            <div id="prayer-location" class="prayer-location">Mencari lokasi untuk waktu sholat…</div>
+          </div>
+          <span aria-hidden="true" style="font-size:25px">🌙</span>
+        </div>
+        <div class="prayer-next">
+          <div id="prayer-next-label" class="prayer-next-label">Menuju waktu sholat berikutnya</div>
+          <div id="prayer-next-name" class="prayer-next-name">Memuat jadwal…</div>
+          <div id="prayer-countdown" class="prayer-countdown">--:--:--</div>
+        </div>
+        <div id="prayer-times" class="prayer-times">
+          <div class="prayer-time"><div class="prayer-time-name">Subuh</div><div class="prayer-time-value">--:--</div></div>
+          <div class="prayer-time"><div class="prayer-time-name">Dhuhur</div><div class="prayer-time-value">--:--</div></div>
+          <div class="prayer-time"><div class="prayer-time-name">Ashar</div><div class="prayer-time-value">--:--</div></div>
+          <div class="prayer-time"><div class="prayer-time-name">Magrib</div><div class="prayer-time-value">--:--</div></div>
+          <div class="prayer-time"><div class="prayer-time-name">Isya</div><div class="prayer-time-value">--:--</div></div>
+        </div>
+        <div class="prayer-note">Jadwal dihitung berdasarkan lokasi perangkat jika izin lokasi diberikan. Jika tidak, aplikasi memakai lokasi perkiraan Tasikmalaya. Waktu dapat berbeda dari jadwal resmi masjid setempat.</div>
       </section>
 
       <div class="dx-grid">
@@ -2091,7 +2125,88 @@
   function dxSapaan(){
     const h = new Date().getHours();
     const w = h < 11 ? 'pagi' : h < 15 ? 'siang' : h < 18 ? 'sore' : 'malam';
-    return 'Selamat ' + w + ', Lola';
+    return { text:'Selamat ' + w + ', Lola', icon: h < 11 ? '🌤️' : h < 15 ? '☀️' : h < 18 ? '🌇' : '🌙' };
+  }
+
+  const DX_PRAYERS = [
+    {key:'Fajr', name:'Subuh', label:'Subuh'},
+    {key:'Dhuhr', name:'Dhuhur', label:'Dhuhur'},
+    {key:'Asr', name:'Ashar', label:'Ashar'},
+    {key:'Maghrib', name:'Magrib', label:'Magrib'},
+    {key:'Isha', name:'Isya', label:'Isya'}
+  ];
+  let dxPrayerSchedule = null;
+  let dxPrayerTimer = null;
+
+  function dxPrayerMinutes(value){
+    const match = String(value || '').match(/(\d{1,2}):(\d{2})/);
+    return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+  }
+  function dxPrayerClock(seconds){
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':');
+  }
+  function dxUpdatePrayerCountdown(){
+    const nameEl = document.getElementById('prayer-next-name');
+    const countEl = document.getElementById('prayer-countdown');
+    const labelEl = document.getElementById('prayer-next-label');
+    if(!dxPrayerSchedule || !nameEl || !countEl) return;
+    const now = new Date();
+    const nowMinutes = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+    let next = null;
+    for(const prayer of dxPrayerSchedule){
+      const minutes = dxPrayerMinutes(prayer.time);
+      if(minutes !== null && minutes > nowMinutes){ next = {...prayer, minutes}; break; }
+    }
+    let target = new Date(now);
+    if(!next){
+      next = {...dxPrayerSchedule[0], minutes: dxPrayerMinutes(dxPrayerSchedule[0].time)};
+      target.setDate(target.getDate()+1);
+      labelEl.textContent = 'Menuju waktu sholat berikutnya (besok)';
+    }else{
+      labelEl.textContent = 'Waktu sholat berikutnya';
+    }
+    if(next.minutes === null){ countEl.textContent = 'Jadwal tidak tersedia'; return; }
+    target.setHours(Math.floor(next.minutes/60), Math.floor(next.minutes%60), 0, 0);
+    const seconds = Math.max(0, Math.floor((target.getTime()-now.getTime())/1000));
+    nameEl.textContent = next.name + ' • ' + next.time;
+    countEl.textContent = dxPrayerClock(seconds);
+    document.querySelectorAll('#prayer-times .prayer-time').forEach((el,i)=>{
+      el.classList.toggle('active', DX_PRAYERS[i] && DX_PRAYERS[i].name === next.name);
+    });
+  }
+  async function dxLoadPrayerTimes(){
+    const locEl = document.getElementById('prayer-location');
+    const timesEl = document.getElementById('prayer-times');
+    if(!locEl || !timesEl) return;
+    const load = async (lat, lon, label) => {
+      const now = new Date();
+      const date = [String(now.getDate()).padStart(2,'0'),String(now.getMonth()+1).padStart(2,'0'),now.getFullYear()].join('-');
+      const url = `https://api.aladhan.com/v1/timings/${date}?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&method=20`;
+      const response = await fetch(url);
+      if(!response.ok) throw new Error('Jadwal sholat tidak dapat dimuat');
+      const json = await response.json();
+      const timings = json && json.data && json.data.timings;
+      if(!timings) throw new Error('Data jadwal sholat kosong');
+      dxPrayerSchedule = DX_PRAYERS.map(p=>({...p,time:String(timings[p.key]||'').match(/\d{1,2}:\d{2}/)?.[0] || '--:--'}));
+      locEl.textContent = 'Lokasi: ' + label + ' • jadwal hari ini';
+      timesEl.innerHTML = dxPrayerSchedule.map(p=>`<div class="prayer-time"><div class="prayer-time-name">${p.label}</div><div class="prayer-time-value">${p.time}</div></div>`).join('');
+      dxUpdatePrayerCountdown();
+      if(dxPrayerTimer) clearInterval(dxPrayerTimer);
+      dxPrayerTimer = setInterval(dxUpdatePrayerCountdown,1000);
+    };
+    const fallback = () => load(-7.3274,108.2207,'Cirebon (perkiraan)');
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        pos => load(pos.coords.latitude,pos.coords.longitude,'lokasi perangkat').catch(()=>fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';})),
+        () => fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';}),
+        {timeout:5000,maximumAge:3600000}
+      );
+    }else{
+      fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';});
+    }
   }
 
   async function renderDashboard(){
@@ -2099,7 +2214,10 @@
     el.innerHTML = '<div class="dx-empty">Memuat data...</div>';
 
     const now = new Date();
-    document.getElementById('dx-greet').textContent = dxSapaan();
+    const sapaan = dxSapaan();
+    document.getElementById('dx-greet').textContent = sapaan.text;
+    document.getElementById('dx-greet-icon').textContent = sapaan.icon;
+    dxLoadPrayerTimes();
     document.getElementById('dx-date').textContent = now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
     const data = await ambilDataServer();
