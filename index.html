@@ -569,7 +569,7 @@
         DATABASE PRIBADI<br>LOLA DWI SETIAWAN<br>JANGAN KEPO
       </h1>
       <p class="text-slate-400 text-sm mb-8 leading-relaxed">
-        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.4 | Di Update : 20 Oktober 2026
+        Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.4.5 | Di Update : 24 Oktober 2026
       </p>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
@@ -2312,7 +2312,10 @@
             <div class="font-semibold text-slate-900 text-sm">${escHtml(String(d.anggota || '-'))}</div>
             <div class="text-[11px] text-slate-500">${escHtml(String(d.center || '-'))} &middot; ${escHtml(fmtTglDMY(d.tanggal))}</div>
           </div>
-          <button onclick="hapusData(${Number(d.id)||0})" class="text-red-600 text-[11px] font-medium">Hapus</button>
+          <div class="flex items-center gap-3 shrink-0">
+            <button type="button" onclick="editRekap(${i})" class="text-blue-700 text-[11px] font-medium">✏️ Edit</button>
+            <button onclick="hapusData(${Number(d.id)||0})" class="text-red-600 text-[11px] font-medium">Hapus</button>
+          </div>
         </div>
         <div class="grid grid-cols-2 gap-x-3 gap-y-2 text-[12px]">
           <div class="text-slate-500">Tanggal</div><div class="text-slate-900 text-right break-words">${escHtml(fmtTglDMY(d.tanggal))}</div>
@@ -2331,6 +2334,149 @@
         </div>
       </div>
     `).join('');
+  }
+
+  // ===== Edit data rekapan (sinkron ke Google Spreadsheet) =====
+  let editRekapId = null;
+  let eSignCanvas = null, eSignCtx = null, eSignHas = false, eSignDrawing = false;
+
+  function urlTtdGambar(url){
+    const u = String(url||'').trim();
+    if(!/^https?:\/\//i.test(u)) return '';
+    const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*?id=)([A-Za-z0-9_-]+)/i) || u.match(/[?&]id=([A-Za-z0-9_-]+)/i);
+    return m ? 'https://drive.google.com/thumbnail?id='+encodeURIComponent(m[1])+'&sz=w800' : u;
+  }
+
+  function initEditSignPad(){
+    eSignCanvas = document.getElementById('e-sign-pad');
+    if(!eSignCanvas) return;
+    const rect = eSignCanvas.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    eSignCanvas.width = rect.width * ratio;
+    eSignCanvas.height = rect.height * ratio;
+    eSignCtx = eSignCanvas.getContext('2d');
+    eSignCtx.scale(ratio, ratio);
+    eSignCtx.lineWidth = 2.2;
+    eSignCtx.lineCap = 'round';
+    eSignCtx.strokeStyle = '#0f172a';
+    eSignHas = false;
+    const pos = (e) => {
+      const r = eSignCanvas.getBoundingClientRect();
+      const q = e.touches ? e.touches[0] : e;
+      return { x: q.clientX - r.left, y: q.clientY - r.top };
+    };
+    const start = (e) => { e.preventDefault(); eSignDrawing = true; const q = pos(e); eSignCtx.beginPath(); eSignCtx.moveTo(q.x,q.y); };
+    const move = (e) => {
+      if(!eSignDrawing) return;
+      e.preventDefault();
+      const q = pos(e);
+      eSignCtx.lineTo(q.x,q.y);
+      eSignCtx.stroke();
+      eSignHas = true;
+    };
+    const end = () => { eSignDrawing = false; };
+    eSignCanvas.addEventListener('mousedown', start);
+    eSignCanvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    eSignCanvas.addEventListener('touchstart', start, { passive:false });
+    eSignCanvas.addEventListener('touchmove', move, { passive:false });
+    eSignCanvas.addEventListener('touchend', end);
+  }
+  function clearEditSign(){
+    if(!eSignCtx || !eSignCanvas) return;
+    eSignCtx.clearRect(0,0,eSignCanvas.width,eSignCanvas.height);
+    eSignHas = false;
+  }
+
+  function editRekap(i){
+    const d = rekapCache[i];
+    if(!d){ showToast('Data tidak ditemukan'); return; }
+    editRekapId = d.id;
+    const fld = (id,label,val,extra='') => `<div><label class="block text-[12px] font-semibold text-slate-700 mb-1">${label}</label>${extra.startsWith('<textarea') ? extra.replace('>', ` id="${id}">`)+escHtml(String(val??''))+'</textarea>' : `<input type="${extra||'text'}" id="${id}" value="${escHtml(String(val??''))}" class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-300 bg-slate-100 text-slate-900">`}</div>`;
+    const ta = (id,label,val) => `<div><label class="block text-[12px] font-semibold text-slate-700 mb-1">${label}</label><textarea id="${id}" rows="2" class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-300 bg-slate-100 text-slate-900">${escHtml(String(val??''))}</textarea></div>`;
+    const tgl = fmtTglDMY(d.tanggal);
+    const ttdLama = urlTtdGambar(d.linkTandaTangan || '');
+    const isi = `<form id="form-edit-rekap" onsubmit="return simpanEditRekap(event)" class="space-y-3">
+      <div><label class="block text-[12px] font-semibold text-slate-700 mb-1">Tanggal (dd-mm-yyyy)</label><input required type="text" id="e-tanggal" inputmode="numeric" maxlength="10" placeholder="dd-mm-yyyy" value="${escHtml(tgl==='-'?'':tgl)}" class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-300 bg-slate-100 text-slate-900"></div>
+      ${fld('e-staf','Nama Cabang',d.staf)}
+      ${fld('e-center','Kode Center',d.center)}
+      ${fld('e-id-anggota','Nomor ID Anggota',d.idAnggota)}
+      ${fld('e-anggota','Nama Anggota',d.anggota)}
+      <div><label class="block text-[12px] font-semibold text-slate-700 mb-1">Jumlah Tanggung Renteng (Rp)</label><input required type="number" min="0" id="e-nominal" value="${Number(d.nominal)||0}" class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-300 bg-slate-100 text-slate-900"></div>
+      ${ta('e-penanggung','Anggota yang ditanggung',d.penanggung)}
+      ${fld('e-alasan','Alasan Tanggung Renteng',d.alasan)}
+      ${ta('e-ket','Keterangan Manager/Asmen',d.keterangan)}
+      <div>
+        <label class="block text-[12px] font-semibold text-slate-700 mb-1">Tanda Tangan Manager/Asmen</label>
+        ${ttdLama ? `<div class="mb-2"><div class="text-[11px] text-slate-500 mb-1">Tanda tangan saat ini:</div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px;display:flex;justify-content:center"><img src="${escHtml(ttdLama)}" alt="Tanda tangan saat ini" style="max-height:110px;max-width:100%;object-fit:contain" onerror="this.parentNode.innerHTML='<span style=&quot;font-size:12px;color:#64748b&quot;>Pratinjau tidak dapat dimuat</span>'"></div></div>` : '<div class="text-[11px] text-slate-500 mb-2">Belum ada tanda tangan tersimpan.</div>'}
+        <div class="text-[11px] text-slate-500 mb-1">Untuk mengganti, tanda tangani di kotak berikut (kosongkan jika tidak diganti):</div>
+        <canvas id="e-sign-pad" style="width:100%;height:150px;background:#fff;border:1px dashed #94a3b8;border-radius:10px;touch-action:none;display:block"></canvas>
+        <button type="button" onclick="clearEditSign()" class="mt-1 text-[11px] font-medium text-slate-600 underline">Hapus coretan</button>
+      </div>
+      <p class="text-[11px] text-slate-500">Bukti pendukung tidak diubah.</p>
+      <div class="flex gap-2 pt-1">
+        <button type="button" onclick="tutupModalLampiran()" class="flex-1 rounded-lg px-3 py-2.5 text-[13px] font-semibold border border-slate-300 text-slate-700 bg-white">Batal</button>
+        <button type="submit" class="flex-1 rounded-lg px-3 py-2.5 text-[13px] font-semibold text-white grad-btn">Simpan Perubahan</button>
+      </div>
+    </form>`;
+    bukaModalLampiran('Edit Data Tanggung Renteng', isi);
+    initEditSignPad();
+    const inp = document.getElementById('e-tanggal');
+    inp.addEventListener('input', ()=>{
+      const dg = inp.value.replace(/\D/g,'').slice(0,8);
+      let out = dg;
+      if(dg.length>4) out = dg.slice(0,2)+'-'+dg.slice(2,4)+'-'+dg.slice(4);
+      else if(dg.length>2) out = dg.slice(0,2)+'-'+dg.slice(2);
+      inp.value = out;
+    });
+  }
+
+  async function simpanEditRekap(e){
+    e.preventDefault();
+    if(!cekUrlGas()) return false;
+    const tanggalISO = tglInputKeISO(document.getElementById('e-tanggal').value);
+    if(!tanggalISO){
+      showToast('Tanggal harus berformat dd-mm-yyyy, contoh 20-08-2026');
+      return false;
+    }
+    const btn = document.querySelector('#form-edit-rekap button[type="submit"]');
+    const teks = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Menyimpan...';
+    const v = id => document.getElementById(id).value.trim();
+    const data = {
+      tanggal: tanggalISO,
+      staf: v('e-staf'),
+      center: v('e-center'),
+      idAnggota: v('e-id-anggota'),
+      anggota: v('e-anggota'),
+      nominal: Number(document.getElementById('e-nominal').value || 0),
+      penanggung: v('e-penanggung'),
+      alasan: v('e-alasan'),
+      keterangan: v('e-ket')
+    };
+    if(eSignHas && eSignCanvas) data.signature = eSignCanvas.toDataURL('image/png');
+    try{
+      const res = await fetch(URL_GAS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'editTanggungRenteng', id: editRekapId, data: data })
+      });
+      const json = await res.json();
+      if(json && json.success){
+        tutupModalLampiran();
+        showToast('Perubahan tersimpan ke server');
+        renderRekap();
+        renderDashboard();
+      } else {
+        showToast('Gagal menyimpan: ' + (json && json.message ? json.message : 'error tidak diketahui'));
+      }
+    }catch(err){
+      console.error(err);
+      showToast('Gagal terhubung ke server. Cek koneksi internet.');
+    }finally{
+      btn.disabled = false; btn.textContent = teks;
+    }
+    return false;
   }
 
   function bukaModalLampiran(judul, isi){
