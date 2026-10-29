@@ -517,22 +517,7 @@
 
   .dx-greet-row{display:flex;align-items:center;gap:9px}
   .dx-greet-icon{display:inline-flex;align-items:center;justify-content:center;font-size:25px;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 5px rgba(245,179,1,.2))}
-  .prayer-card{background:#fff;border:1px solid rgba(23,59,112,.13);border-radius:18px;padding:17px 18px;margin:0 0 14px;box-shadow:0 8px 24px -18px rgba(11,35,71,.22)}
-  .prayer-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .prayer-title{font-size:15px;font-weight:800;color:#0b2347}
-  .prayer-location{font-size:11px;color:#64748b;margin-top:3px}
-  .prayer-next{margin-top:14px;padding:13px 14px;border-radius:14px;background:#eef4fb;border:1px solid #d9e5f4}
-  .prayer-next-label{font-size:11px;color:#475569;font-weight:600}
-  .prayer-next-name{font-size:17px;font-weight:800;color:#0b2347;margin-top:3px}
-  .prayer-countdown{font-size:22px;font-weight:800;color:#173b70;margin-top:2px;font-variant-numeric:tabular-nums}
-  .prayer-times{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:12px}
-  .prayer-time{padding:9px 3px;text-align:center;border:1px solid #e2e8f0;border-radius:11px;background:#fff;min-width:0}
-  .prayer-time.active{background:#173b70;border-color:#173b70}
-  .prayer-time-name{font-size:10px;color:#64748b;font-weight:600}
-  .prayer-time-value{font-size:12px;color:#0f172a;font-weight:800;margin-top:4px}
-  .prayer-time.active .prayer-time-name,.prayer-time.active .prayer-time-value{color:#fff}
-  .prayer-note{font-size:10px;color:#64748b;line-height:1.45;margin-top:10px}
-  @media(max-width:380px){.prayer-times{gap:4px}.prayer-time{padding:8px 1px}.prayer-time-name{font-size:9px}.prayer-time-value{font-size:11px}}
+
 
 </style>
 </head>
@@ -707,29 +692,6 @@
           <div class="dx-chip"><span id="stat-total" class="dx-chip-n">0</span><span class="dx-chip-l">catatan seluruhnya</span></div>
           <div class="dx-chip"><span id="stat-bulan" class="dx-chip-n">0</span><span class="dx-chip-l">catatan bulan ini</span></div>
         </div>
-      </section>
-
-      <section class="prayer-card" aria-label="Pengingat waktu sholat">
-        <div class="prayer-head">
-          <div>
-            <div class="prayer-title">🕌 Pengingat Waktu Sholat</div>
-            <div id="prayer-location" class="prayer-location">Mencari lokasi untuk waktu sholat…</div>
-          </div>
-          <span aria-hidden="true" style="font-size:25px">🌙</span>
-        </div>
-        <div class="prayer-next">
-          <div id="prayer-next-label" class="prayer-next-label">Menuju waktu sholat berikutnya</div>
-          <div id="prayer-next-name" class="prayer-next-name">Memuat jadwal…</div>
-          <div id="prayer-countdown" class="prayer-countdown">--:--:--</div>
-        </div>
-        <div id="prayer-times" class="prayer-times">
-          <div class="prayer-time"><div class="prayer-time-name">Subuh</div><div class="prayer-time-value">--:--</div></div>
-          <div class="prayer-time"><div class="prayer-time-name">Dhuhur</div><div class="prayer-time-value">--:--</div></div>
-          <div class="prayer-time"><div class="prayer-time-name">Ashar</div><div class="prayer-time-value">--:--</div></div>
-          <div class="prayer-time"><div class="prayer-time-name">Magrib</div><div class="prayer-time-value">--:--</div></div>
-          <div class="prayer-time"><div class="prayer-time-name">Isya</div><div class="prayer-time-value">--:--</div></div>
-        </div>
-        <div class="prayer-note">Jadwal dihitung berdasarkan lokasi perangkat jika izin lokasi diberikan. Jika tidak, aplikasi memakai lokasi perkiraan Tasikmalaya. Waktu dapat berbeda dari jadwal resmi masjid setempat.</div>
       </section>
 
       <div class="dx-grid">
@@ -2128,87 +2090,6 @@
     return { text:'Selamat ' + w + ', Lola', icon: h < 11 ? '🌤️' : h < 15 ? '☀️' : h < 18 ? '🌇' : '🌙' };
   }
 
-  const DX_PRAYERS = [
-    {key:'Fajr', name:'Subuh', label:'Subuh'},
-    {key:'Dhuhr', name:'Dhuhur', label:'Dhuhur'},
-    {key:'Asr', name:'Ashar', label:'Ashar'},
-    {key:'Maghrib', name:'Magrib', label:'Magrib'},
-    {key:'Isha', name:'Isya', label:'Isya'}
-  ];
-  let dxPrayerSchedule = null;
-  let dxPrayerTimer = null;
-
-  function dxPrayerMinutes(value){
-    const match = String(value || '').match(/(\d{1,2}):(\d{2})/);
-    return match ? Number(match[1]) * 60 + Number(match[2]) : null;
-  }
-  function dxPrayerClock(seconds){
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':');
-  }
-  function dxUpdatePrayerCountdown(){
-    const nameEl = document.getElementById('prayer-next-name');
-    const countEl = document.getElementById('prayer-countdown');
-    const labelEl = document.getElementById('prayer-next-label');
-    if(!dxPrayerSchedule || !nameEl || !countEl) return;
-    const now = new Date();
-    const nowMinutes = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
-    let next = null;
-    for(const prayer of dxPrayerSchedule){
-      const minutes = dxPrayerMinutes(prayer.time);
-      if(minutes !== null && minutes > nowMinutes){ next = {...prayer, minutes}; break; }
-    }
-    let target = new Date(now);
-    if(!next){
-      next = {...dxPrayerSchedule[0], minutes: dxPrayerMinutes(dxPrayerSchedule[0].time)};
-      target.setDate(target.getDate()+1);
-      labelEl.textContent = 'Menuju waktu sholat berikutnya (besok)';
-    }else{
-      labelEl.textContent = 'Waktu sholat berikutnya';
-    }
-    if(next.minutes === null){ countEl.textContent = 'Jadwal tidak tersedia'; return; }
-    target.setHours(Math.floor(next.minutes/60), Math.floor(next.minutes%60), 0, 0);
-    const seconds = Math.max(0, Math.floor((target.getTime()-now.getTime())/1000));
-    nameEl.textContent = next.name + ' • ' + next.time;
-    countEl.textContent = dxPrayerClock(seconds);
-    document.querySelectorAll('#prayer-times .prayer-time').forEach((el,i)=>{
-      el.classList.toggle('active', DX_PRAYERS[i] && DX_PRAYERS[i].name === next.name);
-    });
-  }
-  async function dxLoadPrayerTimes(){
-    const locEl = document.getElementById('prayer-location');
-    const timesEl = document.getElementById('prayer-times');
-    if(!locEl || !timesEl) return;
-    const load = async (lat, lon, label) => {
-      const now = new Date();
-      const date = [String(now.getDate()).padStart(2,'0'),String(now.getMonth()+1).padStart(2,'0'),now.getFullYear()].join('-');
-      const url = `https://api.aladhan.com/v1/timings/${date}?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&method=20`;
-      const response = await fetch(url);
-      if(!response.ok) throw new Error('Jadwal sholat tidak dapat dimuat');
-      const json = await response.json();
-      const timings = json && json.data && json.data.timings;
-      if(!timings) throw new Error('Data jadwal sholat kosong');
-      dxPrayerSchedule = DX_PRAYERS.map(p=>({...p,time:String(timings[p.key]||'').match(/\d{1,2}:\d{2}/)?.[0] || '--:--'}));
-      locEl.textContent = 'Lokasi: ' + label + ' • jadwal hari ini';
-      timesEl.innerHTML = dxPrayerSchedule.map(p=>`<div class="prayer-time"><div class="prayer-time-name">${p.label}</div><div class="prayer-time-value">${p.time}</div></div>`).join('');
-      dxUpdatePrayerCountdown();
-      if(dxPrayerTimer) clearInterval(dxPrayerTimer);
-      dxPrayerTimer = setInterval(dxUpdatePrayerCountdown,1000);
-    };
-    const fallback = () => load(-7.3274,108.2207,'Cirebon (perkiraan)');
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(
-        pos => load(pos.coords.latitude,pos.coords.longitude,'lokasi perangkat').catch(()=>fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';})),
-        () => fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';}),
-        {timeout:5000,maximumAge:3600000}
-      );
-    }else{
-      fallback().catch(()=>{locEl.textContent='Jadwal sholat tidak dapat dimuat. Periksa koneksi internet.';});
-    }
-  }
-
   async function renderDashboard(){
     const el = document.getElementById('recent-list');
     el.innerHTML = '<div class="dx-empty">Memuat data...</div>';
@@ -2217,7 +2098,6 @@
     const sapaan = dxSapaan();
     document.getElementById('dx-greet').textContent = sapaan.text;
     document.getElementById('dx-greet-icon').textContent = sapaan.icon;
-    dxLoadPrayerTimes();
     document.getElementById('dx-date').textContent = now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
     const data = await ambilDataServer();
