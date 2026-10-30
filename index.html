@@ -109,6 +109,18 @@
     color:#fff;
   }
   .fade-in{ animation: fadeIn .35s ease both; }
+
+  /* ===== Animasi perpindahan menu ===== */
+  .menu-transition-enter{ animation:menuSlideIn .34s cubic-bezier(.2,.75,.25,1) both; will-change:opacity,transform; }
+  @keyframes menuSlideIn{
+    from{opacity:0;transform:translateY(14px) scale(.992);filter:blur(2px)}
+    to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+  }
+  .side-link:active{transform:scale(.975)}
+  @media (prefers-reduced-motion: reduce){
+    .menu-transition-enter{animation:none!important}
+    .side-link,.tab-btn{transition:none!important}
+  }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
   ::-webkit-scrollbar{ width:6px; height:6px; }
   ::-webkit-scrollbar-thumb{ background:#2b3252; border-radius:6px; }
@@ -1242,11 +1254,40 @@
     ov.classList.toggle('show', open);
   }
 
+  // Bunyi klik ringan menggunakan Web Audio API (tanpa file audio eksternal).
+  let menuAudioContext=null;
+  function playMenuClickSound(){
+    try{
+      const AudioCtx=window.AudioContext||window.webkitAudioContext;
+      if(!AudioCtx) return;
+      if(!menuAudioContext) menuAudioContext=new AudioCtx();
+      if(menuAudioContext.state==='suspended') menuAudioContext.resume();
+      const ctx=menuAudioContext;
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(740,ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(560,ctx.currentTime+0.055);
+      gain.gain.setValueAtTime(0.0001,ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.075,ctx.currentTime+0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.075);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.08);
+    }catch(e){ /* suara tidak didukung browser: abaikan tanpa mengganggu menu */ }
+  }
+
   function switchTab(tab){
+    playMenuClickSound();
     if(tab==='keamanan' && !kmdUnlocked){ bukaModalPass(); return; }
     if(tab!=='keamanan') kmdUnlocked=false;
     ['dashboard','input','rekap','keamanan','device'].forEach(t=>{
-      document.getElementById('content-'+t).classList.toggle('hidden', t!==tab);
+      const panel=document.getElementById('content-'+t);
+      panel.classList.toggle('hidden', t!==tab);
+      if(t===tab){
+        panel.classList.remove('menu-transition-enter');
+        void panel.offsetWidth;
+        panel.classList.add('menu-transition-enter');
+      }
       document.getElementById('tab-'+t).classList.toggle('active', t===tab);
     });
     document.getElementById('lock-ico').textContent = kmdUnlocked ? '🔓' : '🔒';
