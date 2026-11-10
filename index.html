@@ -109,18 +109,6 @@
     color:#fff;
   }
   .fade-in{ animation: fadeIn .35s ease both; }
-
-  /* ===== Animasi perpindahan menu ===== */
-  .menu-transition-enter{ animation:menuSlideIn .34s cubic-bezier(.2,.75,.25,1) both; will-change:opacity,transform; }
-  @keyframes menuSlideIn{
-    from{opacity:0;transform:translateY(14px) scale(.992);filter:blur(2px)}
-    to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
-  }
-  .side-link:active{transform:scale(.975)}
-  @media (prefers-reduced-motion: reduce){
-    .menu-transition-enter{animation:none!important}
-    .side-link,.tab-btn{transition:none!important}
-  }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
   ::-webkit-scrollbar{ width:6px; height:6px; }
   ::-webkit-scrollbar-thumb{ background:#2b3252; border-radius:6px; }
@@ -491,40 +479,45 @@
   @media (prefers-reduced-motion:reduce){ .dx-bar,.dx-rank-fill{ animation:none; } }
 
 
-  /* Animasi banyak kupu-kupu yang beterbangan pada layar persiapan dashboard */
-  #page-loading{overflow:hidden; isolation:isolate;}
-  .butterfly-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
-  .butterfly{
-    position:absolute;left:-12%;top:var(--top,50%);
-    font-size:var(--size,26px);opacity:0;
-    filter:drop-shadow(0 3px 5px rgba(23,59,112,.16));
-    animation:butterflyFly var(--duration,9s) linear var(--delay,0s) infinite;
+  /* Animasi salju turun pada layar persiapan dashboard */
+  #page-loading{overflow:hidden;isolation:isolate;}
+  .snow-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .snowflake{
+    position:absolute;left:var(--left,50%);top:-8%;
+    color:#7eb8e8;font-size:var(--size,18px);opacity:0;
+    text-shadow:0 2px 8px rgba(56,132,190,.22);
+    animation:snowFall var(--duration,7s) linear var(--delay,0s) infinite;
     will-change:transform,opacity;
   }
-  .butterfly:nth-child(1){--top:12%;--size:25px;--duration:10s;--delay:-2s}
-  .butterfly:nth-child(2){--top:24%;--size:34px;--duration:12s;--delay:-8s}
-  .butterfly:nth-child(3){--top:38%;--size:21px;--duration:8s;--delay:-4s}
-  .butterfly:nth-child(4){--top:53%;--size:30px;--duration:11s;--delay:-7s}
-  .butterfly:nth-child(5){--top:68%;--size:24px;--duration:9s;--delay:-1s}
-  .butterfly:nth-child(6){--top:79%;--size:32px;--duration:13s;--delay:-10s}
-  .butterfly:nth-child(7){--top:89%;--size:20px;--duration:10s;--delay:-5s}
-  .butterfly:nth-child(8){--top:17%;--size:19px;--duration:14s;--delay:-11s}
-  .butterfly:nth-child(9){--top:62%;--size:27px;--duration:12s;--delay:-3s}
-  .butterfly:nth-child(10){--top:43%;--size:23px;--duration:9s;--delay:-6s}
-  @keyframes butterflyFly{
-    0%{transform:translate3d(-5vw,25px,0) rotate(-18deg) scale(.75);opacity:0}
-    8%{opacity:.88}
-    25%{transform:translate3d(30vw,-35px,0) rotate(15deg) scale(1)}
-    50%{transform:translate3d(58vw,28px,0) rotate(-12deg) scale(.9);opacity:.95}
-    75%{transform:translate3d(85vw,-30px,0) rotate(18deg) scale(1.05)}
-    94%{opacity:.8}
-    100%{transform:translate3d(115vw,20px,0) rotate(-15deg) scale(.8);opacity:0}
+  .snowflake:nth-child(1){--left:4%;--size:17px;--duration:7s;--delay:-2s}
+  .snowflake:nth-child(2){--left:11%;--size:24px;--duration:9s;--delay:-6s}
+  .snowflake:nth-child(3){--left:18%;--size:13px;--duration:6s;--delay:-3s}
+  .snowflake:nth-child(4){--left:25%;--size:21px;--duration:8s;--delay:-5s}
+  .snowflake:nth-child(5){--left:32%;--size:16px;--duration:10s;--delay:-1s}
+  .snowflake:nth-child(6){--left:39%;--size:25px;--duration:7.5s;--delay:-7s}
+  .snowflake:nth-child(7){--left:46%;--size:14px;--duration:8.5s;--delay:-4s}
+  .snowflake:nth-child(8){--left:53%;--size:20px;--duration:6.5s;--delay:-2s}
+  .snowflake:nth-child(9){--left:60%;--size:15px;--duration:9.5s;--delay:-8s}
+  .snowflake:nth-child(10){--left:67%;--size:23px;--duration:7s;--delay:-3s}
+  .snowflake:nth-child(11){--left:74%;--size:13px;--duration:8s;--delay:-6s}
+  .snowflake:nth-child(12){--left:81%;--size:22px;--duration:10s;--delay:-4s}
+  .snowflake:nth-child(13){--left:88%;--size:16px;--duration:7.5s;--delay:-1s}
+  .snowflake:nth-child(14){--left:96%;--size:19px;--duration:9s;--delay:-7s}
+  @keyframes snowFall{
+    0%{transform:translate3d(0,-5vh,0) rotate(0deg);opacity:0}
+    10%{opacity:.85}
+    50%{transform:translate3d(28px,50vh,0) rotate(180deg);opacity:.9}
+    90%{opacity:.8}
+    100%{transform:translate3d(-18px,110vh,0) rotate(360deg);opacity:0}
   }
-  .butterfly-center{position:relative;z-index:1;width:150px;height:150px;display:flex;align-items:center;justify-content:center;}
-  .butterfly-center .main-butterfly{font-size:78px;filter:drop-shadow(0 8px 14px rgba(23,59,112,.18));animation:butterflyHover 2s ease-in-out infinite;}
-  @keyframes butterflyHover{0%,100%{transform:translateY(3px) rotate(-7deg)}50%{transform:translateY(-10px) rotate(8deg)}}
+  .snow-center{position:relative;z-index:1;width:150px;height:150px;display:flex;align-items:center;justify-content:center;}
+  .snow-center .main-snowflake{
+    font-size:78px;filter:drop-shadow(0 8px 14px rgba(56,132,190,.2));
+    animation:snowSpin 8s linear infinite;
+  }
+  @keyframes snowSpin{from{transform:rotate(0deg) scale(.96)}50%{transform:rotate(180deg) scale(1.06)}to{transform:rotate(360deg) scale(.96)}}
   #page-loading > .flex{position:relative;z-index:1}
-  @media(prefers-reduced-motion:reduce){.butterfly,.butterfly-center .main-butterfly{animation:none;opacity:.8}}
+  @media(prefers-reduced-motion:reduce){.snowflake,.snow-center .main-snowflake{animation:none;opacity:.8}}
 
 
   .dx-greet-row{display:flex;align-items:center;gap:9px}
@@ -587,15 +580,17 @@
 <section id="page-loading" class="hidden fixed inset-0 z-50 flex items-center justify-center px-6">
   <div class="flex flex-col items-center w-full max-w-xs">
 
-    <div class="butterfly-field" aria-hidden="true">
-      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
-      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
-      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
-      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
-      <span class="butterfly">🦋</span><span class="butterfly">🦋</span>
+    <div class="snow-field" aria-hidden="true">
+      <span class="snowflake">❄</span><span class="snowflake">❄</span>
+      <span class="snowflake">❅</span><span class="snowflake">❄</span>
+      <span class="snowflake">❆</span><span class="snowflake">❄</span>
+      <span class="snowflake">❅</span><span class="snowflake">❄</span>
+      <span class="snowflake">❆</span><span class="snowflake">❄</span>
+      <span class="snowflake">❅</span><span class="snowflake">❄</span>
+      <span class="snowflake">❆</span><span class="snowflake">❄</span>
     </div>
-    <div class="butterfly-center" aria-hidden="true">
-      <span class="main-butterfly">🦋</span>
+    <div class="snow-center" aria-hidden="true">
+      <span class="main-snowflake">❄️</span>
     </div>
 
     <div class="text-white font-semibold text-[15px] mt-4 mb-1">
@@ -1254,40 +1249,11 @@
     ov.classList.toggle('show', open);
   }
 
-  // Bunyi klik ringan menggunakan Web Audio API (tanpa file audio eksternal).
-  let menuAudioContext=null;
-  function playMenuClickSound(){
-    try{
-      const AudioCtx=window.AudioContext||window.webkitAudioContext;
-      if(!AudioCtx) return;
-      if(!menuAudioContext) menuAudioContext=new AudioCtx();
-      if(menuAudioContext.state==='suspended') menuAudioContext.resume();
-      const ctx=menuAudioContext;
-      const osc=ctx.createOscillator();
-      const gain=ctx.createGain();
-      osc.type='sine';
-      osc.frequency.setValueAtTime(740,ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(560,ctx.currentTime+0.055);
-      gain.gain.setValueAtTime(0.0001,ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.075,ctx.currentTime+0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.075);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.08);
-    }catch(e){ /* suara tidak didukung browser: abaikan tanpa mengganggu menu */ }
-  }
-
   function switchTab(tab){
-    playMenuClickSound();
     if(tab==='keamanan' && !kmdUnlocked){ bukaModalPass(); return; }
     if(tab!=='keamanan') kmdUnlocked=false;
     ['dashboard','input','rekap','keamanan','device'].forEach(t=>{
-      const panel=document.getElementById('content-'+t);
-      panel.classList.toggle('hidden', t!==tab);
-      if(t===tab){
-        panel.classList.remove('menu-transition-enter');
-        void panel.offsetWidth;
-        panel.classList.add('menu-transition-enter');
-      }
+      document.getElementById('content-'+t).classList.toggle('hidden', t!==tab);
       document.getElementById('tab-'+t).classList.toggle('active', t===tab);
     });
     document.getElementById('lock-ico').textContent = kmdUnlocked ? '🔓' : '🔒';
