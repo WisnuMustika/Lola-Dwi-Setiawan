@@ -593,6 +593,14 @@
   .sr-ttd-clear, .sr-ttd-clear *{ color:#b91c1c !important; }
   @media print{ .sr-ttd{ border:0 !important; } }
 
+  /* ===== Data Surat ===== */
+  .ds-card{ display:block; width:100%; text-align:left; transition:transform .15s ease, box-shadow .15s ease; }
+  .ds-card:active{ transform:scale(.99); }
+  .ds-opt{ width:100%; border-radius:12px; padding:11px 14px; font-size:13px; font-weight:700; text-align:center; }
+  .ds-opt.main{ color:#fff; }
+  .ds-opt.soft{ background:#eef2f7; color:#1e293b; border:1px solid #cbd5e1; }
+  .ds-opt.danger{ background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; }
+
   /* ===== Loading: Nailong mengejar balon ===== */
   .chase-stage{ position:relative; width:100%; max-width:300px; height:170px; margin:0 auto 4px; }
   .chase-ground{ position:absolute; left:0; right:0; bottom:6px; height:4px; border-radius:4px; background:rgba(23,59,112,.14); }
@@ -649,13 +657,6 @@
       <p class="text-slate-400 text-sm mb-8 leading-relaxed">
         Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.5.0 | Di Update : 18 November 2026
       </p>
-      <div class="text-left space-y-2 mb-4">
-        <label for="auth-username" class="block text-xs font-semibold text-slate-300">Username</label>
-        <input id="auth-username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Bismillah Dulu" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
-        <label for="auth-password" class="block text-xs font-semibold text-slate-300">Password</label>
-        <input id="auth-password" type="password" autocomplete="current-password" placeholder="Masukkan password" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
-        <p class="text-[10px] text-slate-400">Gunakan username dan password akun masing-masing.</p>
-      </div>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
         <span id="mulai-akses-label">Mulai Akses</span>
@@ -770,6 +771,10 @@
       <button id="tab-surat" onclick="switchTab('surat')" class="side-link tab-btn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
         Buat Surat
+      </button>
+      <button id="tab-datasurat" onclick="switchTab('datasurat')" class="side-link tab-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+        Data Surat
       </button>
     </nav>
 
@@ -1054,9 +1059,20 @@
     <!-- ===== TAB: BUAT SURAT ===== -->
     <div id="content-surat" class="hidden fade-in">
       <div class="sr-wrap">
+        <div id="sr-edit-banner" class="sr-noprint hidden mb-3">
+          <div class="flex flex-wrap items-center gap-2 rounded-xl px-3 py-2.5 text-[12px]" style="background:#eaf2ff;border:1px solid #b9d0f5;color:#173b70">
+            <span class="font-semibold">✏️ Surat ini tersimpan di Data Surat.</span>
+            <span id="sr-save-status" class="text-[11px]" style="opacity:.85">Perubahan tersimpan otomatis.</span>
+            <span class="ml-auto flex gap-2">
+              <button type="button" class="sr-btn ghost" style="padding:6px 12px" onclick="switchTab('datasurat')">Data Surat</button>
+              <button type="button" class="sr-btn ghost" style="padding:6px 12px" onclick="suratBaru()">+ Surat Baru</button>
+            </span>
+          </div>
+        </div>
         <div class="sr-toolbar sr-noprint">
           <button type="button" class="sr-btn primary" onclick="cetakSurat()">🖨️ Cetak / Simpan PDF</button>
           <button type="button" class="sr-btn ghost" onclick="resetSurat()">Kosongkan Isi</button>
+          <button type="button" class="sr-btn ghost" onclick="switchTab('datasurat')">📁 Data Surat</button>
         </div>
         <p class="sr-noprint text-[11px] text-slate-400 mb-2">Isi bagian yang bergaris putus-putus. Tanda tangan: gesek jari / mouse di kotak tanda tangan masing-masing, tekan Hapus untuk mengulang. Garis putus-putus tidak ikut tercetak.</p>
         <div class="sr-scroll">
@@ -1072,7 +1088,7 @@
             <input type="date" id="sr-tanggal-picker" tabindex="-1" aria-hidden="true" onchange="setTanggalDariPicker(this.value)" style="position:absolute;right:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none">
           </div>
 
-          <div class="sr-row"><span class="sr-lbl">Nomor</span><span class="sr-sep">:</span><input type="text" id="sr-nomor" class="sr-edit" placeholder="nomor surat"></div>
+          <div class="sr-row"><span class="sr-lbl">Nomor</span><span class="sr-sep">:</span><input type="text" id="sr-nomor" class="sr-edit" placeholder="Contoh : 001/KMD-KDW/SPA/XI/2026"></div>
           <div class="sr-row"><span class="sr-lbl">Lampiran</span><span class="sr-sep">:</span><input type="text" id="sr-lampiran" class="sr-edit" placeholder="-"></div>
           <div class="sr-row"><span class="sr-lbl">Perihal</span><span class="sr-sep">:</span><input type="text" id="sr-perihal" class="sr-edit" placeholder="perihal surat"></div>
 
@@ -1114,6 +1130,16 @@
       </div>
     </div>
 
+    <!-- ===== TAB: DATA SURAT ===== -->
+    <div id="content-datasurat" class="hidden fade-in">
+      <div class="card-glass rounded-2xl p-4 mb-3">
+        <input type="text" id="search-datasurat" oninput="renderDataSurat()" placeholder="Cari nomor / perihal / tujuan surat..."
+          class="w-full rounded-lg px-3 py-2.5 text-[13px] border border-slate-700 bg-slate-100">
+        <p class="text-[11px] text-slate-500 mt-2">Surat masuk ke sini otomatis saat Anda klik <b>Cetak / Simpan PDF</b> di menu Buat Surat. Ketuk surat untuk Edit atau Download.</p>
+      </div>
+      <div id="datasurat-list" class="space-y-3"></div>
+    </div>
+
   </main>
 </section>
 
@@ -1149,6 +1175,20 @@
     <div class="flex gap-2">
       <button onclick="tutupKameraWajah()" class="flex-1 rounded-xl py-3 text-[12px] font-semibold" style="background:#f1f5f9;color:#334155">Batal</button>
       <button id="face-capture-confirm" onclick="ambilDanVerifikasiWajah()" class="flex-1 rounded-xl py-3 text-[12px] font-bold text-white" style="background:#173b70">Ambil & Verifikasi</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-surat-opsi" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4" style="background:rgba(5,6,13,.72);backdrop-filter:blur(2px);" onclick="if(event.target===this)tutupOpsiSurat()">
+  <div class="bg-white rounded-2xl w-full max-w-sm p-5 shadow-2xl" style="border:1px solid var(--line)">
+    <div id="so-judul" class="font-bold text-slate-900 text-[15px] break-words"></div>
+    <div id="so-meta" class="text-[11px] text-slate-500 mt-1 mb-3"></div>
+    <div id="so-isi" class="text-[12px] text-slate-700 rounded-lg p-3 mb-4" style="background:#f8fafc;border:1px solid #e2e8f0;max-height:96px;overflow:hidden;white-space:pre-wrap;word-break:break-word"></div>
+    <div class="grid gap-2">
+      <button type="button" class="ds-opt main grad-btn" onclick="editSurat(suratOpsiId)">✏️ Edit Surat</button>
+      <button type="button" class="ds-opt main grad-btn" onclick="downloadSurat(suratOpsiId)">⬇️ Download Surat (PDF)</button>
+      <button type="button" class="ds-opt danger" onclick="hapusSurat(suratOpsiId)">🗑️ Hapus Surat</button>
+      <button type="button" class="ds-opt soft" onclick="tutupOpsiSurat()">Tutup</button>
     </div>
   </div>
 </div>
@@ -1230,84 +1270,10 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const STORAGE_KEY = 'tr_ciledug_data';
-  // Isi dari Supabase Dashboard > Project Settings > API (Project URL dan anon/public key).
-  const SUPABASE_URL = 'https://txortfqhuwgsndueuqec.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_eVesF6YgJQ4ZgkpYiiaVfQ_4TEay0FV';
-  const supabaseReady = window.supabase && /^https:\/\//.test(SUPABASE_URL) && !SUPABASE_URL.includes('ISI_') && !SUPABASE_ANON_KEY.includes('ISI_');
-  const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } }) : null;
-  let currentUser = null;
-  async function autentikasiLogin(){
-    if(!sb) throw new Error('Konfigurasi Supabase belum lengkap. Periksa SUPABASE_ANON_KEY pada file HTML.');
-    const username=(document.getElementById('auth-username').value||'').trim().toLowerCase();
-    const password=document.getElementById('auth-password').value;
-    if(!username || !password) throw new Error('Masukkan username dan password.');
-    if(!['wisnu','lola'].includes(username)) throw new Error('Username tidak terdaftar. Gunakan Wisnu atau Lola.');
-
-    // Username tidak dipetakan ke email di browser. Edge Function quick-worker
-    // melakukan pencarian username pada user_profiles dan memverifikasi password.
-    const {data,error}=await sb.functions.invoke('quick-worker',{
-      body:{username,password}
-    });
-    if(error) throw new Error(error.message || 'Tidak dapat menghubungi layanan login username.');
-
-    // quick-worker dapat mengembalikan session Supabase secara langsung.
-    const payload=data?.data || data?.result || data;
-    let session=payload?.session || payload;
-    if(session?.access_token && session?.refresh_token){
-      const {data:sessionData,error:sessionError}=await sb.auth.setSession({
-        access_token:session.access_token,
-        refresh_token:session.refresh_token
-      });
-      if(sessionError) throw sessionError;
-      currentUser=sessionData.user || sessionData.session?.user || payload?.user || null;
-    } else {
-      // Kompatibilitas jika fungsi mengembalikan email akun setelah memvalidasi
-      // username. Email tidak dimasukkan atau disimpan di halaman login.
-      const resolvedEmail=payload?.email || payload?.user?.email || payload?.profile?.email;
-      if(!resolvedEmail) {
-        if(payload?.success === false || payload?.error) {
-          throw new Error(payload.message || payload.error || 'Username atau password salah.');
-        }
-        throw new Error('Fungsi quick-worker belum mengembalikan session login. Periksa respons Edge Function.');
-      }
-      const {data:loginData,error:loginError}=await sb.auth.signInWithPassword({
-        email:resolvedEmail,
-        password
-      });
-      if(loginError) throw loginError;
-      currentUser=loginData.user;
-    }
-    if(!currentUser) {
-      const {data:whoami,error:whoamiError}=await sb.auth.getUser();
-      if(whoamiError) throw whoamiError;
-      currentUser=whoami.user;
-    }
-    if(!currentUser) throw new Error('Login belum menghasilkan sesi pengguna yang valid.');
-    return currentUser;
-  }
-  async function pastikanSesi(){
-    if(!sb) return null;
-    const {data,error}=await sb.auth.getSession();
-    if(error) throw error;
-    currentUser=data.session?.user || null;
-    return currentUser;
-  }
-  async function catatProfilPengguna(user, loginUsername){
-    if(!sb || !user) return;
-    const meta=user.user_metadata||{};
-    const username=loginUsername || meta.username || null;
-    const profile={id:user.id,email:user.email,full_name:meta.full_name||user.email,updated_at:new Date().toISOString()};
-    // Jangan menimpa username yang sudah terdaftar dengan NULL.
-    if(username) profile.username=username;
-    const {error}=await sb.from('user_profiles').upsert(profile,{onConflict:'id'});
-    if(error) console.warn('Profil pengguna belum tersinkron:',error.message);
-  }
-  // Integrasi Supabase Auth + tabel utama tanggung_renteng.
-  const URL_GAS = ''; // data utama tidak lagi memakai Google Apps Script
-
+  const STORAGE_KEY = 'tr_ciledug_data'; // sudah tidak dipakai, data kini langsung ke server
+  // Isi link Web App hasil deploy Code_TanggungRenteng.gs di sini:
+  const URL_GAS = 'https://script.google.com/macros/s/AKfycbzYpHPjqAD876a4x7JIST5R45odijyXbXkB5lKthmSsu_RiyTZ_ELYStjQH9vIWAR-7fA/exec';
   // Server mandiri untuk menu Device Akses. Isi setelah Code.gs baru di-deploy sebagai Web App.
   const DEVICE_ACCESS_URL = 'https://script.google.com/macros/s/AKfycbwgEdg5PGOAZYRNI8nz838mmSX7JUFc4-PXVmA1ha53Ny9i0SmpV4kylhuigLw5aKTh/exec';
   const DEVICE_ACCESS_CONFIGURED = /^https:\/\/script\.google\.com\/macros\/s\//.test(DEVICE_ACCESS_URL);
@@ -1317,21 +1283,24 @@
   let deviceAccessAdminPin = '08031997';
 
   function cekUrlGas(){
-    if(!sb){ showToast('Isi URL dan anon key Supabase terlebih dahulu.'); return false; }
-    if(!currentUser){ showToast('Silakan login terlebih dahulu.'); return false; }
+    if(!URL_GAS){
+      showToast('URL_GAS belum diisi. Hubungi admin untuk memasang link Web App.');
+      return false;
+    }
     return true;
   }
 
-  function dariBarisSupabase(row){
-    return {id:row.id, legacy_id:row.legacy_id, tanggal:row.tanggal, staf:row.cabang||'', center:row.kode_center||'', idAnggota:row.nomor_id_anggota||'', anggota:row.nama_anggota||'', nominal:Number(row.jumlah_tanggung_renteng||0), penanggung:row.anggota_penanggung||'', alasan:row.alasan||'', keterangan:row.keterangan_manager||'', lokasi:row.lokasi||'', createdAt:row.created_at};
-  }
   async function ambilDataServer(){
     if(!cekUrlGas()) return [];
     try{
-      const {data,error}=await sb.from('tanggung_renteng').select('*').order('created_at',{ascending:false});
-      if(error) throw error;
-      return (data||[]).map(dariBarisSupabase);
-    }catch(err){ console.error(err); showToast('Gagal memuat data Supabase: '+err.message); return []; }
+      const res = await fetch(URL_GAS + '?action=ambilTanggungRenteng');
+      const json = await res.json();
+      return (json && json.success) ? json.data : [];
+    }catch(err){
+      console.error(err);
+      showToast('Gagal memuat data dari server');
+      return [];
+    }
   }
 
   function tampilkanSapaanLola(){
@@ -1355,16 +1324,6 @@
     const sp=document.getElementById('mulai-akses-spinner'); if(sp) sp.classList.add('hidden');
   }
 
-  // Izinkan tombol Enter dari kolom username/password untuk menjalankan login.
-  document.addEventListener('DOMContentLoaded',()=>{
-    ['auth-username','auth-password'].forEach(id=>{
-      const field=document.getElementById(id);
-      if(field) field.addEventListener('keydown',event=>{
-        if(event.key==='Enter'){ event.preventDefault(); goDashboard(); }
-      });
-    });
-  });
-
   async function goDashboard(){
     const startButton = document.getElementById('btn-mulai-akses');
     const startLabel = document.getElementById('mulai-akses-label');
@@ -1379,14 +1338,6 @@
     if(startLabel) startLabel.textContent = 'Memulai akses...';
     if(startArrow) startArrow.classList.add('hidden');
     if(startSpinner) startSpinner.classList.remove('hidden');
-    try {
-      await autentikasiLogin();
-      await catatProfilPengguna(currentUser, (document.getElementById('auth-username').value||'').trim().toLowerCase());
-    } catch(authErr) {
-      showToast('Login Supabase gagal: '+authErr.message);
-      resetTombolMulaiAkses();
-      return;
-    }
     if(DEVICE_ACCESS_CONFIGURED){
       try {
         const allowed = await cekAksesDevice();
@@ -1449,9 +1400,7 @@
     document.getElementById('modal-logout').classList.add('hidden');
   }
 
-  async function konfirmasiLogout(){
-    if(sb){ try{ await sb.auth.signOut(); }catch(e){ console.warn(e); } }
-    currentUser=null;
+  function konfirmasiLogout(){
     stopPresence();
     hentikanHeartbeatDeviceAkses();
     document.getElementById('modal-logout').classList.add('hidden');
@@ -1506,7 +1455,7 @@
   function switchTab(tab){
     if(tab==='keamanan' && !kmdUnlocked){ bukaModalPass(); return; }
     if(tab!=='keamanan') kmdUnlocked=false;
-    ['dashboard','input','rekap','keamanan','device','surat'].forEach(t=>{
+    ['dashboard','input','rekap','keamanan','device','surat','datasurat'].forEach(t=>{
       document.getElementById('content-'+t).classList.toggle('hidden', t!==tab);
       document.getElementById('tab-'+t).classList.toggle('active', t===tab);
     });
@@ -1517,6 +1466,7 @@
     if(tab==='keamanan') renderKeamanan();
     if(tab==='device'){ muatDeviceAkses(); muatStatusWajah(); }
     if(tab==='surat') initSurat();
+    if(tab==='datasurat') renderDataSurat();
     toggleSidebar(false);
     window.scrollTo(0,0);
   }
@@ -2292,17 +2242,21 @@
     };
 
     try{
-      const payload={user_id:currentUser.id,tanggal:item.tanggal,cabang:item.staf,kode_center:item.center,nomor_id_anggota:item.idAnggota,nama_anggota:item.anggota,jumlah_tanggung_renteng:item.nominal,anggota_penanggung:item.penanggung,alasan:item.alasan,keterangan_manager:item.keterangan,lokasi:item.lokasi};
-      const {error}=await sb.from('tanggung_renteng').insert(payload);
-      if(!error){
+      const res = await fetch(URL_GAS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // hindari preflight CORS di Apps Script
+        body: JSON.stringify({ action: 'simpanTanggungRenteng', data: item })
+      });
+      const json = await res.json();
+      if(json && json.success){
         document.getElementById('form-tr').reset();
         attachments = [];
         renderAttachmentList();
         clearSignature();
-        showToast('Data berhasil disimpan ke Supabase');
+        showToast('Data berhasil disimpan ke server');
         switchTab('rekap');
       } else {
-        showToast('Gagal menyimpan: ' + (error ? error.message : 'error tidak diketahui'));
+        showToast('Gagal menyimpan: ' + (json && json.message ? json.message : 'error tidak diketahui'));
       }
     }catch(err){
       console.error(err);
@@ -2318,13 +2272,18 @@
     if(!confirm('Hapus data ini?')) return;
     if(!cekUrlGas()) return;
     try{
-      const {error}=await sb.from('tanggung_renteng').delete().eq('id',id).eq('user_id',currentUser.id);
-      if(!error){
+      const res = await fetch(URL_GAS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'hapusTanggungRenteng', id: id })
+      });
+      const json = await res.json();
+      if(json && json.success){
         showToast('Data dihapus');
         renderRekap();
         renderDashboard();
       } else {
-        showToast('Gagal menghapus: ' + (error ? error.message : ''));
+        showToast('Gagal menghapus: ' + (json && json.message ? json.message : ''));
       }
     }catch(err){
       console.error(err);
@@ -2589,15 +2548,19 @@
     };
     if(eSignHas && eSignCanvas) data.signature = eSignCanvas.toDataURL('image/png');
     try{
-      const payload={tanggal:data.tanggal,cabang:data.staf,kode_center:data.center,nomor_id_anggota:data.idAnggota,nama_anggota:data.anggota,jumlah_tanggung_renteng:data.nominal,anggota_penanggung:data.penanggung,alasan:data.alasan,keterangan_manager:data.keterangan,updated_at:new Date().toISOString()};
-      const {error}=await sb.from('tanggung_renteng').update(payload).eq('id',editRekapId).eq('user_id',currentUser.id);
-      if(!error){
+      const res = await fetch(URL_GAS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'editTanggungRenteng', id: editRekapId, data: data })
+      });
+      const json = await res.json();
+      if(json && json.success){
         tutupModalLampiran();
-        showToast('Perubahan tersimpan ke Supabase');
+        showToast('Perubahan tersimpan ke server');
         renderRekap();
         renderDashboard();
       } else {
-        showToast('Gagal menyimpan: ' + (error ? error.message : 'error tidak diketahui'));
+        showToast('Gagal menyimpan: ' + (json && json.message ? json.message : 'error tidak diketahui'));
       }
     }catch(err){
       console.error(err);
@@ -2728,6 +2691,8 @@
     const isi = document.getElementById('sr-isi');
     if(isi) setTimeout(()=>autoGrowSurat(isi), 0);
     setTimeout(initTtdSurat, 0);
+    const paper = document.getElementById('surat-paper');
+    if(paper && !paper.dataset.autosave){ paper.addEventListener('input', suratAutoSave); paper.dataset.autosave='1'; }
   }
 
   function initTtdSurat(){
@@ -2753,7 +2718,7 @@
         ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke();
         last=p;
       });
-      const end=()=>{ drawing=false; };
+      const end=()=>{ if(drawing){ drawing=false; suratAutoSave(); } };
       c.addEventListener('pointerup',end);
       c.addEventListener('pointercancel',end);
       c.addEventListener('pointerleave',end);
@@ -2766,7 +2731,7 @@
   }
   function hapusTtdSurat(btn){
     const c=btn.parentElement.querySelector('canvas');
-    if(c) bersihkanCanvasTtd(c);
+    if(c){ bersihkanCanvasTtd(c); suratAutoSave(); }
   }
 
 
@@ -2780,10 +2745,12 @@
     const [y,m,d]=v.split('-').map(Number);
     document.getElementById('sr-tanggal').value =
       new Date(y,m-1,d).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    suratAutoSave();
   }
 
   function resetSurat(){
     if(!confirm('Kosongkan semua isian dan tanda tangan?')) return;
+    suratEditId = null; clearTimeout(suratSaveTimer); sembunyikanBannerSurat();
     ['sr-nomor','sr-lampiran','sr-perihal','sr-kepada','sr-alamat','sr-isi','sr-anggota','sr-saksi'].forEach(id=>{
       const el = document.getElementById(id); if(el) el.value = '';
     });
@@ -2794,7 +2761,242 @@
   }
   function cetakSurat(){
     fitSuratSatuHalaman();
+    // Simpan ke Data Surat dulu (baru, atau perbarui jika sedang mengedit surat)
+    if(!simpanSurat(false)) showToast('Isi surat masih kosong, tidak disimpan ke Data Surat');
     window.print();
+  }
+
+  // ===== Data Surat =====
+  const K_SURAT = 'kmd_surat_data';
+  let suratEditId = null, suratOpsiId = null, suratSaveTimer = null;
+
+  function getSuratData(){
+    try{ const a = JSON.parse(lsGet(K_SURAT) || '[]'); return Array.isArray(a) ? a : []; }catch(e){ return []; }
+  }
+  function setSuratData(arr){
+    try{ localStorage.setItem(K_SURAT, JSON.stringify(arr)); return true; }catch(e){ return false; }
+  }
+  function suratIdBaru(){ return 'sr' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function canvasKosong(c){
+    try{
+      const d = c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+      for(let i=3;i<d.length;i+=4){ if(d[i]) return false; }
+      return true;
+    }catch(e){ return true; }
+  }
+  function ambilFormSurat(){
+    const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+    const ttd = {};
+    document.querySelectorAll('.sr-ttd').forEach(c=>{ ttd[c.dataset.key] = canvasKosong(c) ? '' : c.toDataURL('image/png'); });
+    return {
+      tempat:g('sr-tempat'), tanggal:g('sr-tanggal'), nomor:g('sr-nomor'), lampiran:g('sr-lampiran'),
+      perihal:g('sr-perihal'), kepada:g('sr-kepada'), alamat:g('sr-alamat'), isi:g('sr-isi'),
+      anggota:g('sr-anggota'), saksi:g('sr-saksi'), ttd
+    };
+  }
+  function adaIsiSurat(f){
+    return ['nomor','lampiran','perihal','kepada','alamat','isi','anggota','saksi'].some(k=>String(f[k]||'').trim())
+      || Object.values(f.ttd||{}).some(Boolean);
+  }
+  function isiFormSurat(rec){
+    const set = (id,v) => { const el = document.getElementById(id); if(el) el.value = v || ''; };
+    set('sr-tempat', rec.tempat || 'Kedawung'); set('sr-tanggal', rec.tanggal || tanggalIndoHariIni());
+    set('sr-nomor', rec.nomor); set('sr-lampiran', rec.lampiran); set('sr-perihal', rec.perihal);
+    set('sr-kepada', rec.kepada); set('sr-alamat', rec.alamat); set('sr-isi', rec.isi);
+    set('sr-anggota', rec.anggota); set('sr-saksi', rec.saksi);
+    autoGrowSurat(document.getElementById('sr-isi'));
+    document.querySelectorAll('.sr-ttd').forEach(c=>{
+      bersihkanCanvasTtd(c);
+      const src = rec.ttd && rec.ttd[c.dataset.key];
+      if(!src) return;
+      const img = new Image();
+      img.onload = () => {
+        const r = c.getBoundingClientRect();
+        c.getContext('2d').drawImage(img, 0, 0, r.width, r.height);
+      };
+      img.src = src;
+    });
+  }
+
+  function simpanSurat(silent){
+    const f = ambilFormSurat();
+    if(!suratEditId && !adaIsiSurat(f)) return false;
+    const all = getSuratData(), now = Date.now();
+    let rec = suratEditId ? all.find(r=>r.id===suratEditId) : null;
+    const baru = !rec;
+    if(rec){ Object.assign(rec, f, {updatedAt:now}); }
+    else { rec = Object.assign({id:suratIdBaru(), createdAt:now, updatedAt:now}, f); all.push(rec); suratEditId = rec.id; }
+    if(!setSuratData(all)){
+      if(baru) suratEditId = null;
+      showToast('Gagal menyimpan: penyimpanan browser penuh');
+      return false;
+    }
+    tampilkanBannerSurat();
+    if(!silent) showToast(baru ? 'Surat disimpan ke Data Surat' : 'Perubahan surat disimpan');
+    return true;
+  }
+  // Simpan otomatis (hanya saat surat sedang tersimpan/diedit)
+  function suratAutoSave(){
+    if(!suratEditId) return;
+    clearTimeout(suratSaveTimer);
+    suratSaveTimer = setTimeout(()=>{ simpanSurat(true); }, 500);
+  }
+  function tampilkanBannerSurat(){
+    const b = document.getElementById('sr-edit-banner'); if(b) b.classList.remove('hidden');
+    const st = document.getElementById('sr-save-status');
+    if(st) st.textContent = 'Tersimpan otomatis ' + new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  }
+  function sembunyikanBannerSurat(){
+    const b = document.getElementById('sr-edit-banner'); if(b) b.classList.add('hidden');
+  }
+  function suratBaru(){
+    suratEditId = null; clearTimeout(suratSaveTimer); sembunyikanBannerSurat();
+    ['sr-nomor','sr-lampiran','sr-perihal','sr-kepada','sr-alamat','sr-isi','sr-anggota','sr-saksi'].forEach(id=>{
+      const el = document.getElementById(id); if(el) el.value = '';
+    });
+    document.getElementById('sr-tanggal').value = tanggalIndoHariIni();
+    document.getElementById('sr-tempat').value = 'Kedawung';
+    document.querySelectorAll('.sr-ttd').forEach(bersihkanCanvasTtd);
+    autoGrowSurat(document.getElementById('sr-isi'));
+    showToast('Surat baru');
+  }
+
+  function renderDataSurat(){
+    const el = document.getElementById('datasurat-list'); if(!el) return;
+    const q = (document.getElementById('search-datasurat')?.value || '').toLowerCase().trim();
+    const all = getSuratData().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+    const data = all.filter(r=>[r.nomor,r.perihal,r.kepada,r.alamat,r.isi,r.tanggal,r.anggota,r.saksi]
+      .some(v=>String(v||'').toLowerCase().includes(q)));
+    if(!data.length){
+      el.innerHTML = '<div class="card-glass rounded-2xl p-6 text-center text-slate-500 text-sm">' +
+        (all.length ? 'Tidak ada surat yang cocok.' : 'Belum ada surat tersimpan. Buat surat lalu klik Cetak / Simpan PDF.') + '</div>';
+      return;
+    }
+    el.innerHTML = data.map(r=>{
+      const cuplikan = String(r.isi||'').replace(/\s+/g,' ').trim().slice(0,110);
+      return `<button type="button" onclick="bukaOpsiSurat('${escHtml(r.id)}')" class="card-glass ds-card rounded-2xl p-4">
+        <div class="flex justify-between items-start gap-2">
+          <div class="font-semibold text-slate-900 text-sm break-words">${escHtml(r.perihal || '(Tanpa perihal)')}</div>
+          <span class="text-[11px] text-blue-700 font-medium shrink-0">Ketuk untuk opsi ›</span>
+        </div>
+        <div class="text-[12px] text-slate-700 mt-1 break-words">Kepada: ${escHtml(r.kepada || '-')}</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">No. ${escHtml(r.nomor || '-')} &middot; ${escHtml(r.tanggal || '-')}</div>
+        ${cuplikan ? `<div class="text-[11px] text-slate-500 mt-2 break-words">${escHtml(cuplikan)}${String(r.isi||'').length>110?'…':''}</div>` : ''}
+        <div class="text-[10px] text-slate-400 mt-2">Diperbarui ${escHtml(fmtWaktu(r.updatedAt||Date.now()))}</div>
+      </button>`;
+    }).join('');
+  }
+
+  function bukaOpsiSurat(id){
+    const r = getSuratData().find(x=>x.id===id); if(!r) return;
+    suratOpsiId = id;
+    document.getElementById('so-judul').textContent = r.perihal || '(Tanpa perihal)';
+    document.getElementById('so-meta').textContent = 'No. ' + (r.nomor||'-') + ' · ' + (r.tanggal||'-') + ' · Kepada: ' + (r.kepada||'-');
+    document.getElementById('so-isi').textContent = r.isi || '(Isi surat kosong)';
+    document.getElementById('modal-surat-opsi').classList.remove('hidden');
+  }
+  function tutupOpsiSurat(){ document.getElementById('modal-surat-opsi').classList.add('hidden'); }
+
+  function editSurat(id){
+    const rec = getSuratData().find(x=>x.id===id); if(!rec) return;
+    tutupOpsiSurat();
+    switchTab('surat');
+    setTimeout(()=>{
+      initTtdSurat();
+      isiFormSurat(rec);
+      suratEditId = id;
+      tampilkanBannerSurat();
+      const st = document.getElementById('sr-save-status');
+      if(st) st.textContent = 'Mengedit surat ini. Perubahan tersimpan otomatis.';
+      window.scrollTo(0,0);
+    }, 90);
+  }
+  function hapusSurat(id){
+    const rec = getSuratData().find(x=>x.id===id); if(!rec) return;
+    if(!confirm('Hapus surat "' + (rec.perihal || rec.nomor || 'tanpa judul') + '" dari Data Surat?')) return;
+    setSuratData(getSuratData().filter(x=>x.id!==id));
+    if(suratEditId===id){ suratEditId = null; sembunyikanBannerSurat(); }
+    tutupOpsiSurat(); renderDataSurat(); showToast('Surat dihapus');
+  }
+
+  // --- Download surat sebagai PDF ---
+  function muatScript(url, cek){
+    return new Promise((ok, gagal)=>{
+      if(cek()) return ok();
+      const s = document.createElement('script');
+      s.src = url; s.onload = ()=>cek() ? ok() : gagal(new Error('lib')); s.onerror = ()=>gagal(new Error('lib'));
+      document.head.appendChild(s);
+    });
+  }
+  function suratHTML(rec){
+    const kop = document.querySelector('#surat-paper .sr-kop')?.src || '';
+    const e = escHtml;
+    const ttd = k => rec.ttd && rec.ttd[k]
+      ? `<img src="${rec.ttd[k]}" style="width:100%;height:66px;display:block;margin:2px 0">`
+      : '<div style="height:66px;margin:2px 0"></div>';
+    const nama = v => `<div style="font-weight:700;border-bottom:1px solid #000;margin:0 18px;min-height:20px">${e(v||'')}</div>`;
+    const row = (l,v) => `<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px"><span style="width:86px;flex:none">${l}</span><span>:</span><span style="flex:1">${e(v||'')}</span></div>`;
+    return `<div style="width:794px;background:#fff;color:#000;font-family:'Times New Roman',Times,serif;font-size:14px;line-height:1.55;box-sizing:border-box">
+      ${kop ? `<img src="${kop}" style="width:100%;display:block;margin:0">` : ''}
+      <div style="padding:16px 48px 28px">
+        <div style="text-align:right;margin-bottom:6px">${e(rec.tempat||'')}, ${e(rec.tanggal||'')}</div>
+        ${row('Nomor',rec.nomor)}${row('Lampiran',rec.lampiran)}${row('Perihal',rec.perihal)}
+        <div style="margin-top:14px">Kepada Yth.</div>
+        <div style="font-weight:700">${e(rec.kepada||'')}</div>
+        <div style="margin-top:2px">${e(rec.alamat||'')}</div>
+        <div style="margin-top:14px">Dengan hormat,</div>
+        <div style="margin:10px 0 6px;text-align:justify;white-space:pre-wrap;word-break:break-word;min-height:120px">${e(rec.isi||'')}</div>
+        <div>Demikian surat ini dibuat, atas perhatian dan kerja samanya kami ucapkan terima kasih.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 30px;margin-top:18px;text-align:center">
+          <div><div style="font-weight:700">Mengetahui,</div>${ttd('mengetahui')}<div style="font-weight:700;text-decoration:underline">Feri Zuniawan</div><div style="font-size:13px">Manager Cabang</div></div>
+          <div><div style="font-weight:700">Staf yang bersangkutan,</div>${ttd('staf')}<div style="font-weight:700;text-decoration:underline">Lola Dwi Setiawan</div></div>
+          <div><div style="font-weight:700">Anggota,</div>${ttd('anggota')}${nama(rec.anggota)}</div>
+          <div><div style="font-weight:700">Saksi,</div>${ttd('saksi')}${nama(rec.saksi)}</div>
+        </div>
+      </div></div>`;
+  }
+  function namaFileSurat(rec){
+    const dasar = (rec.nomor || rec.perihal || rec.kepada || 'tanpa-judul').replace(/[^A-Za-z0-9\-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,50) || 'surat';
+    return 'Surat_' + dasar;
+  }
+  function unduhBlob(blob, nama){
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = nama;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+  async function downloadSurat(id){
+    const rec = getSuratData().find(x=>x.id===id); if(!rec) return;
+    tutupOpsiSurat();
+    showToast('Menyiapkan file PDF...');
+    const nama = namaFileSurat(rec);
+    let host = null;
+    try{
+      await muatScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', ()=>window.html2canvas);
+      await muatScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', ()=>window.jspdf);
+      host = document.createElement('div');
+      host.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;background:#fff;pointer-events:none';
+      host.innerHTML = suratHTML(rec);
+      document.body.appendChild(host);
+      await Promise.all([...host.querySelectorAll('img')].map(im=>im.complete ? Promise.resolve() : new Promise(r=>{ im.onload = im.onerror = r; })));
+      const canvas = await window.html2canvas(host.firstElementChild, {scale:2, backgroundColor:'#ffffff', useCORS:true, windowWidth:794});
+      const pdf = new window.jspdf.jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
+      const pw = 210, ph = 297, imgH = canvas.height * pw / canvas.width;
+      const data = canvas.toDataURL('image/jpeg', 0.95);
+      pdf.addImage(data, 'JPEG', 0, 0, pw, imgH);
+      let sisa = imgH - ph, y = 0;
+      while(sisa > 0.5){ y -= ph; pdf.addPage(); pdf.addImage(data, 'JPEG', 0, y, pw, imgH); sisa -= ph; }
+      pdf.save(nama + '.pdf');
+      showToast('Surat berhasil diunduh');
+    }catch(err){
+      // Cadangan bila pustaka PDF gagal dimuat (mis. offline): unduh sebagai file HTML siap cetak
+      const html = '<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>' + escHtml(nama) + '</title>' +
+        '<style>@page{size:A4;margin:0}body{margin:0;background:#fff}</style></head><body>' + suratHTML(rec) + '</body></html>';
+      unduhBlob(new Blob([html], {type:'text/html'}), nama + '.html');
+      showToast('PDF belum bisa dibuat, surat diunduh sebagai file HTML');
+    }finally{
+      if(host) host.remove();
+    }
   }
 
   function showToast(msg){
