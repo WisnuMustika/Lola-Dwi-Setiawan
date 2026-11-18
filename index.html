@@ -650,11 +650,11 @@
         Di Buat : 20 Agustus 2026 | Versi Saat Ini 1.5.0 | Di Update : 18 November 2026
       </p>
       <div class="text-left space-y-2 mb-4">
-        <label for="auth-email" class="block text-xs font-semibold text-slate-300">Email akun</label>
-        <input id="auth-email" type="email" autocomplete="username" placeholder="Masukkan email terdaftar" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
+        <label for="auth-username" class="block text-xs font-semibold text-slate-300">Username</label>
+        <input id="auth-username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Masukkan Wisnu atau Lola" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
         <label for="auth-password" class="block text-xs font-semibold text-slate-300">Password</label>
         <input id="auth-password" type="password" autocomplete="current-password" placeholder="Masukkan password" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
-        <p class="text-[10px] text-slate-400">Gunakan akun yang sudah dibuat melalui Supabase Authentication.</p>
+        <p class="text-[10px] text-slate-400">Gunakan username Wisnu atau Lola dan password akun masing-masing.</p>
       </div>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
@@ -1234,19 +1234,58 @@
 <script>
   const STORAGE_KEY = 'tr_ciledug_data';
   // Isi dari Supabase Dashboard > Project Settings > API (Project URL dan anon/public key).
-  const SUPABASE_URL = 'https://txortfqhuwgsnduequec.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_eVesF6YgJQ4ZgkpYiiaVfQ_4TEay0FV';
+  const SUPABASE_URL = 'https://txortfqhuwgsndueuqec.supabase.co';
+  const SUPABASE_ANON_KEY = 'ISI_SUPABASE_ANON_PUBLIC_KEY';
   const supabaseReady = window.supabase && /^https:\/\//.test(SUPABASE_URL) && !SUPABASE_URL.includes('ISI_') && !SUPABASE_ANON_KEY.includes('ISI_');
   const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } }) : null;
   let currentUser = null;
   async function autentikasiLogin(){
-    if(!sb) throw new Error('Konfigurasi Supabase belum diisi pada SUPABASE_URL dan SUPABASE_ANON_KEY.');
-    const email=document.getElementById('auth-email').value.trim();
+    if(!sb) throw new Error('Konfigurasi Supabase belum lengkap. Periksa SUPABASE_ANON_KEY pada file HTML.');
+    const username=(document.getElementById('auth-username').value||'').trim().toLowerCase();
     const password=document.getElementById('auth-password').value;
-    if(!email || !password) throw new Error('Masukkan email dan password Supabase.');
-    const {data,error}=await sb.auth.signInWithPassword({email,password});
-    if(error) throw error;
-    currentUser=data.user;
+    if(!username || !password) throw new Error('Masukkan username dan password.');
+    if(!['wisnu','lola'].includes(username)) throw new Error('Username tidak terdaftar. Gunakan Wisnu atau Lola.');
+
+    // Username tidak dipetakan ke email di browser. Edge Function quick-worker
+    // melakukan pencarian username pada user_profiles dan memverifikasi password.
+    const {data,error}=await sb.functions.invoke('quick-worker',{
+      body:{username,password}
+    });
+    if(error) throw new Error(error.message || 'Tidak dapat menghubungi layanan login username.');
+
+    // quick-worker dapat mengembalikan session Supabase secara langsung.
+    const payload=data?.data || data?.result || data;
+    let session=payload?.session || payload;
+    if(session?.access_token && session?.refresh_token){
+      const {data:sessionData,error:sessionError}=await sb.auth.setSession({
+        access_token:session.access_token,
+        refresh_token:session.refresh_token
+      });
+      if(sessionError) throw sessionError;
+      currentUser=sessionData.user || sessionData.session?.user || payload?.user || null;
+    } else {
+      // Kompatibilitas jika fungsi mengembalikan email akun setelah memvalidasi
+      // username. Email tidak dimasukkan atau disimpan di halaman login.
+      const resolvedEmail=payload?.email || payload?.user?.email || payload?.profile?.email;
+      if(!resolvedEmail) {
+        if(payload?.success === false || payload?.error) {
+          throw new Error(payload.message || payload.error || 'Username atau password salah.');
+        }
+        throw new Error('Fungsi quick-worker belum mengembalikan session login. Periksa respons Edge Function.');
+      }
+      const {data:loginData,error:loginError}=await sb.auth.signInWithPassword({
+        email:resolvedEmail,
+        password
+      });
+      if(loginError) throw loginError;
+      currentUser=loginData.user;
+    }
+    if(!currentUser) {
+      const {data:whoami,error:whoamiError}=await sb.auth.getUser();
+      if(whoamiError) throw whoamiError;
+      currentUser=whoami.user;
+    }
+    if(!currentUser) throw new Error('Login belum menghasilkan sesi pengguna yang valid.');
     return currentUser;
   }
   async function pastikanSesi(){
@@ -1256,10 +1295,14 @@
     currentUser=data.session?.user || null;
     return currentUser;
   }
-  async function catatProfilPengguna(user){
+  async function catatProfilPengguna(user, loginUsername){
     if(!sb || !user) return;
     const meta=user.user_metadata||{};
-    const {error}=await sb.from('user_profiles').upsert({id:user.id,email:user.email,full_name:meta.full_name||user.email,username:meta.username||null,updated_at:new Date().toISOString()},{onConflict:'id'});
+    const username=loginUsername || meta.username || null;
+    const profile={id:user.id,email:user.email,full_name:meta.full_name||user.email,updated_at:new Date().toISOString()};
+    // Jangan menimpa username yang sudah terdaftar dengan NULL.
+    if(username) profile.username=username;
+    const {error}=await sb.from('user_profiles').upsert(profile,{onConflict:'id'});
     if(error) console.warn('Profil pengguna belum tersinkron:',error.message);
   }
   // Integrasi Supabase Auth + tabel utama tanggung_renteng.
@@ -1312,6 +1355,16 @@
     const sp=document.getElementById('mulai-akses-spinner'); if(sp) sp.classList.add('hidden');
   }
 
+  // Izinkan tombol Enter dari kolom username/password untuk menjalankan login.
+  document.addEventListener('DOMContentLoaded',()=>{
+    ['auth-username','auth-password'].forEach(id=>{
+      const field=document.getElementById(id);
+      if(field) field.addEventListener('keydown',event=>{
+        if(event.key==='Enter'){ event.preventDefault(); goDashboard(); }
+      });
+    });
+  });
+
   async function goDashboard(){
     const startButton = document.getElementById('btn-mulai-akses');
     const startLabel = document.getElementById('mulai-akses-label');
@@ -1328,7 +1381,7 @@
     if(startSpinner) startSpinner.classList.remove('hidden');
     try {
       await autentikasiLogin();
-      await catatProfilPengguna(currentUser);
+      await catatProfilPengguna(currentUser, (document.getElementById('auth-username').value||'').trim().toLowerCase());
     } catch(authErr) {
       showToast('Login Supabase gagal: '+authErr.message);
       resetTombolMulaiAkses();
