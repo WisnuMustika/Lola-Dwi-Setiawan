@@ -651,10 +651,10 @@
       </p>
       <div class="text-left space-y-2 mb-4">
         <label for="auth-username" class="block text-xs font-semibold text-slate-300">Username</label>
-        <input id="auth-username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Masukkan Wisnu atau Lola" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
+        <input id="auth-username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Bismillah Dulu" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
         <label for="auth-password" class="block text-xs font-semibold text-slate-300">Password</label>
         <input id="auth-password" type="password" autocomplete="current-password" placeholder="Masukkan password" class="w-full rounded-xl px-3 py-3 text-sm text-slate-900 bg-white border border-slate-300" required>
-        <p class="text-[10px] text-slate-400">Gunakan username Wisnu atau Lola dan password akun masing-masing.</p>
+        <p class="text-[10px] text-slate-400">Gunakan username dan password akun masing-masing.</p>
       </div>
       <button id="btn-mulai-akses" onclick="goDashboard()"
         class="grad-btn w-full rounded-xl py-3.5 font-semibold text-white flex items-center justify-center gap-2 text-[15px] transition-opacity">
@@ -1235,7 +1235,7 @@
   const STORAGE_KEY = 'tr_ciledug_data';
   // Isi dari Supabase Dashboard > Project Settings > API (Project URL dan anon/public key).
   const SUPABASE_URL = 'https://txortfqhuwgsndueuqec.supabase.co';
-  const SUPABASE_ANON_KEY = 'ISI_SUPABASE_ANON_PUBLIC_KEY';
+  const SUPABASE_ANON_KEY = 'sb_publishable_eVesF6YgJQ4ZgkpYiiaVfQ_4TEay0FV';
   const supabaseReady = window.supabase && /^https:\/\//.test(SUPABASE_URL) && !SUPABASE_URL.includes('ISI_') && !SUPABASE_ANON_KEY.includes('ISI_');
   const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } }) : null;
   let currentUser = null;
